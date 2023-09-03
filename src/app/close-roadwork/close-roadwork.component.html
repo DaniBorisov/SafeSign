@@ -1,0 +1,146 @@
+<div class="split-page" *ngIf="!isMobileView">
+    <!-- Left Side -->     
+    <div class="left-side" [ngStyle]="{'flex': leftSideFlex}">
+        <input type="text" class="search-bar" placeholder="Search" [(ngModel)]="searchText">
+        <div *ngFor="let work of filteredConstructionWorks" (click)="showDetails(work)" class="card">
+            <div class="card-body">
+                <h3 class="card-title">{{ work.street }} - {{ work.city }}</h3>
+                <div class="card-details">
+                    <div class="column">
+                        <label>Start Date</label>
+                        <p>{{ work.startDate }}</p>
+                    </div>
+                    <div class="column">
+                        <label>End Date</label>
+                        <p>{{ work.endDate }}</p>
+                    </div>
+                    <div class="column">
+                        <label>Supervisor</label>
+                        <p> John Johnson</p>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider" (mousedown)="startResize($event)"></div>
+
+    <!-- Right Side -->
+    <div class="right-side" [ngStyle]="{'flex': rightSideFlex}" *ngIf="selectedCard">
+        <div class="details-container">
+            <h3>{{ selectedCard.street }} - {{ selectedCard.city }}</h3>
+            <div class="date-container">
+                <div>
+                  <label>Start Date</label>
+                  <p>{{ selectedCard.startDate }}</p>
+                </div>
+                <div>
+                  <label>End Date</label>
+                  <p>{{ selectedCard.endDate }}</p>
+                </div>
+            </div>    
+            <div class="supervisors-container">
+                <div class="supervisor">
+                    <label>Role</label>
+                    <div>
+                        <p>Names names</p>
+                        <p>Phone number</p>
+                    </div>
+                </div>
+                <div class="supervisor">
+                    <label>Role 2</label>
+                    <div>
+                        <p>Names names 2</p>
+                        <p>Phone number 2</p>
+                    </div>
+                </div>
+                <div class="supervisor">
+                    <label>Role 3</label>
+                    <div>
+                        <p>Names names 3</p>
+                        <p>Phone number 3</p>
+                    </div>
+                </div>
+            </div>
+            <div class="image-container">
+                <img src="../../assets/TestPlan.PNG" alt="Image">
+            </div>
+        </div>
+        <div class="delete-button-container">
+            <button class="delete-button" (click)="deleteConstructionWork(selectedCard)">Close Roadwork</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile View -->
+<div class="mobile-view" *ngIf="isMobileView">
+    <div class="header" *ngIf="!selectedCard">
+        <input type="text" class="search-bar" placeholder="Search">
+    </div>
+    <div class="details-container" *ngIf="selectedCard">
+        <div class="header">
+            <button class="back-arrow" (click)="goBack()">&lt; Back</button>
+        </div>
+        <h3>{{ selectedCard.city }}</h3>
+            <div class="date-container">
+                <div>
+                    <label>Start Date</label>
+                    <p>{{ selectedCard.startDate }}</p>
+                </div>
+                <div>
+                    <label>End Date</label>
+                    <p>{{ selectedCard.endDate }}</p>
+                </div>
+            </div>
+            <div class="supervisors-container">
+                <div class="supervisor">
+                    <label>Role</label>
+                    <div>
+                        <p>Names names</p>
+                        <p>Phone number</p>
+                    </div>
+                </div>
+                <div class="supervisor">
+                    <label>Role 2</label>
+                    <div>
+                        <p>Names names 2</p>
+                        <p>Phone number 2</p>
+                    </div>
+                </div>
+                <div class="supervisor">
+                    <label>Role 3</label>
+                    <div>
+                        <p>Names names 3</p>
+                        <p>Phone number 3</p>
+                    </div>
+                </div>
+            </div>
+            <div class="image-container">
+                <img src="../../assets/TestPlan.PNG" alt="Image">
+            </div>
+            <div class="delete-button-container">
+                <button class="delete-button" (click)="deleteConstructionWork(selectedCard)">Close Roadwork</button>
+            </div>
+    </div>
+    <div class="card-container" *ngIf="!selectedCard">
+        <div *ngFor="let work of constructionWorks" (click)="showDetails(work)" class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ work.street }} - {{ work.city }}</h5>
+                <div class="card-details">
+                    <div class="column">
+                        <label>Start Date</label>
+                        <p>{{ work.startDate }}</p>
+                    </div>
+                    <div class="column">
+                        <label>End Date</label>
+                        <p>{{ work.endDate }}</p>
+                    </div>
+                    <div class="column">
+                        <label>Supervisor</label>
+                        <p> John Johnson</p>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

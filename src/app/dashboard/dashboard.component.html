@@ -1,0 +1,17 @@
+<body>
+    <div class="dashboard-container">
+        <div class="single-card">
+            <div class="card-content" (click)="handleCardClickStatus()">
+                <!-- <img src="../../assets/icons8-ok.gif"> -->
+                <img [src]="isStatusOK() ? '../../assets/icons8-ok.gif' : '../../assets/icons8-error.gif'">
+                <p>Status</p>
+            </div>
+        </div>
+        <div class="dashboard-cards" *ngFor="let card of cards" (click)="handleCardClick(card)">
+            <div class="card-content" >
+                <img src="{{card.img}}">
+                <p>{{ card.content }}</p>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,25 @@
+ /* log in  */
+ .login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+    height:100vh;
+    /* width: 100vw; */
+    background-color: #e6e6e6;
+}
+  
+.login-group {
+    margin-bottom: 1rem;
+}
+  
+input[type="text"],
+input[type="password"] {
+    width: 300px;
+    padding: 0.5rem;
+    margin-top: 10px; /* Adjusted margin here */
+  }
+  
+  .login-button {
+    padding: 0.5rem 1rem;
+  }

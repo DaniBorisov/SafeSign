@@ -1,0 +1,175 @@
+<div class="split-page" *ngIf="!isMobileView">
+
+    <!-- Left Side -->     
+    <div class="left-side" [ngStyle]="{'flex': leftSideFlex}">
+        <div *ngIf="!selectedConstructionWork; else signsSection">
+            <input type="text" class="search-bar" placeholder="Search" [(ngModel)]="searchText">
+            <div *ngFor="let work of filteredConstructionWorks" (click)="retrieveSignsByWorkId(work)" class="card">
+                <div class="card-body">
+                    <h1 class="card-title">{{ work.street }} - {{ work.city }}
+                        <img src="../../assets/icons8-error.gif" *ngIf="hasIssues(work.id)" style="height: 30px; padding-left: 30px">
+                    </h1>    
+                    <div class="card-details">
+                        <div class="column">
+                            <label>Start Date</label>
+                            <p>{{ work.startDate }}</p>
+                        </div>
+                        <div class="column">
+                            <label>End Date</label>
+                            <p>{{ work.endDate }}</p>
+                        </div>
+                        <div class="column">
+                            <label>Supervisor</label>
+                            <p> John Johnson</p>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left Side for Signs -->
+        <ng-template #signsSection>
+            <div class="signs-section">
+                <h3>Signs
+                    <button class="back-arrow" (click)="goBackSigns()">&lt; Back</button>
+                </h3>
+                <div class="sign-cards">
+                    <div *ngFor="let sign of retrievedSigns" (click)="showDetails(sign)" class="sign-card">
+                        <div class="card-body">
+                            <div class="card-details">
+                                <div class="column">
+                                    <p>{{ sign.ogAngle }}</p>
+                                    <p>{{ sign.currAngle }}</p>
+                                </div>
+                                <div class="column">
+                                    <label>Sign</label>
+                                    <p>{{ sign.id }}</p>
+                                </div>
+                                <div class="column">
+                                    <label>Issue</label>
+                                    <p>{{ sign.issue }}</p>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>    
+    </div>
+
+    <div class="divider" (mousedown)="startResize($event)"></div>
+
+
+
+
+    <!-- Right Side -->
+
+    <div class="right-side" [ngStyle]="{'flex': rightSideFlex}" *ngIf="selectedCard">
+        <div class="details-container">
+            <div class="image-container">
+                <img src="../../assets/TestPlan.PNG" alt="Image">
+            </div>
+            <h3>{{ selectedConstructionWork.city }} - {{ selectedConstructionWork.street }}</h3>
+            <div class="date-container">
+                <div class="dates">
+                    <p>{{ selectedCard.ogAngle }}</p>
+                    <p>{{ selectedCard.currAngle }}</p>
+                </div>
+                <div class="sign-info">
+                    <p> Sign: {{ selectedCard.id }}</p>
+                    <p style="font-weight: bold">Issue: {{ selectedCard.issue }}</p>
+                </div>
+            </div>    
+        </div>
+        <div class="delete-button-container">
+            <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Fixed</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile View -->
+<div class="mobile-view" *ngIf="isMobileView">
+
+<div class="ConstructionWork-mobile" *ngIf="!selectedConstructionWork && retrievedSigns ; else signsSection">
+    <div class="header" *ngIf="!selectedCard">
+        <input type="text" class="search-bar" placeholder="Search" [(ngModel)]="searchText">
+    </div>
+    <div class="card-container" *ngIf="!selectedCard">
+        <div *ngFor="let work of filteredConstructionWorks" (click)="retrieveSignsByWorkId(work)" class="card">
+            <div class="card-body">
+                <h3 class="card-title">{{ work.street }} - {{ work.city }}
+                    <img src="../../assets/icons8-error.gif" *ngIf="hasIssues(work.id)" style="height: 30px; padding-left: 30px">
+                </h3>
+                <div class="card-details">
+                    <div class="column">
+                        <label>Start Date</label>
+                        <p>{{ work.startDate }}</p>
+                    </div>
+                    <div class="column">
+                        <label>End Date</label>
+                        <p>{{ work.endDate }}</p>
+                    </div>
+                    <div class="column">
+                        <label>Supervisor</label>
+                        <p> John Johnson</p>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<ng-template #signsSection>
+    <div *ngIf="selectedConstructionWork && retrievedSigns && !selectedCard ;">
+        <div class="header">
+            <button class="back-arrow" (click)="goBackSigns()">&lt; Back</button>
+        </div>
+        <div class="sign-cards">
+            <h3>Signs</h3>
+            <div *ngFor="let sign of retrievedSigns" (click)="showDetails(sign)" class="sign-card">
+                <div class="card-body">
+                    <div class="card-details">
+                        <div class="column">
+                            <p>{{ sign.ogAngle }}</p>
+                            <p>{{ sign.currAngle }}</p>
+                        </div>
+                        <div class="column">
+                            <label>Sign</label>
+                            <p>{{ sign.id }}</p>
+                        </div>
+                        <div class="column">
+                            <label>Issue</label>
+                            <p>{{ sign.issue }}</p>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>  
+
+<div class="details" *ngIf="selectedCard">
+    <div class="header">
+        <button class="back-arrow" (click)="goBack()">&lt; Back</button>
+    </div>
+    <div class="details-container">
+        <div class="image-container">
+            <img src="../../assets/TestPlan.PNG" alt="Image">
+        </div>
+        <h3>{{ selectedConstructionWork.city }} - {{ selectedConstructionWork.street }}</h3>
+        <div class="date-container">
+            <div class="dates">
+                <p>{{ selectedCard.issueDate }}</p>
+                <p>{{ selectedCard.issueTime }}</p>
+            </div>
+            <div class="sign-info">
+                <p> Sign: {{ selectedCard.id }}</p>
+                <p style="font-weight: bold">{{ selectedCard.issue }}</p>
+            </div>
+        </div>    
+    </div>
+    <div class="delete-button-container">
+        <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Fixed</button>
+    </div>
+</div>
+
+</div>

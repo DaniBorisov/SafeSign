@@ -1,0 +1,17 @@
+<body>
+    <div class="login-container">
+        <h1>Sign In</h1>
+            <div class="login-group">
+                <input type="text" #username placeholder="Username">
+            </div>
+            <div class="login-group">
+                <input type="password" #password placeholder="Password">
+            </div>
+            <button (click)="login(username.value,password.value)" class="login-button">Confirm</button>
+        <!-- </form> -->
+        <div *ngIf="loginFail" class="success-message">
+          Invalid Credentils!! Try Aagain
+        </div>
+    </div>
+
+</body>  

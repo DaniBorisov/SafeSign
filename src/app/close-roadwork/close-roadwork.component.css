@@ -1,0 +1,280 @@
+.split-page {
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Hide overflow on the split page */
+  }
+  
+  .left-side, .right-side {
+    flex-grow: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+  }
+  
+
+  /* Left Side Styling  */
+  .search-bar {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .card {
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 2px solid black;
+    border-radius: 20px;
+    position: relative; /* Add position relative */
+  }
+  
+  .card:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 1px;
+    bottom: 0;
+    width: 20px; /* Adjust the width as needed */
+    background-color: Yellow; /* Set the background color to yellow */
+    border-radius: 20px 900px 900px 20px; /* Adjust the border radius to match the card */
+    background-image: url(../../assets/icons8-forward-24.png); /* Replace 'path/to/arrow-image.png' with the actual path to your arrow image */
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .card-title {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .divider {
+    width: 8px;
+    cursor: col-resize;
+    background-color: #ddd;
+  }
+  
+  .image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+/* Details Styleing  */
+
+.details-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Date Styling */
+
+.date-container {
+  display: flex;
+  border-bottom: solid .5px rgb(28, 20, 20);
+}
+
+.date-container > div {
+  margin-right: 20px;
+  margin-bottom: 10px;
+}  
+
+.date-container   label {
+  font-weight: bold;
+}
+
+
+/* Supervisor Styling */
+
+.supervisors-container   label {
+  font-weight: bold;
+}
+
+.supervisors-container {
+  display: flex;
+  flex-direction: column;
+  border-bottom: solid .5px rgb(28, 20, 20);
+  margin-top: 10px;
+}
+
+.supervisor {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.supervisor label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.supervisor div {
+  display: flex;
+}
+
+.supervisor div p {
+  margin-right: 10px;
+}
+
+
+/* Master plan img details styling */
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 100vw; /* Set the maximum width of the image within the container */
+  height: 100vh; /* Maintain the aspect ratio of the image */
+}
+/* Card Details Style  */
+
+.card-details {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-details .column {
+    flex-basis: 32.33%;
+    /* padding: 0 10px; */
+}
+
+.card-details .column label {
+    font-weight: bold;
+}
+  
+/* Delete Button    */
+
+.delete-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
+
+.desktop-view {
+  display: flex;
+  height: 100%;
+}
+  
+  
+  /* Mobile view */
+
+.mobile-view {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+  
+  .mobile-view .header {
+    display: flex;
+    align-items: center;
+    /* align-content: center; */
+    /* justify-items: center; */
+    /* justify-content: center; */
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc; /* Add border on the bottom */
+  }
+  
+  .mobile-view .header .back-arrow {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+  
+
+  /* Mobile View Details  */
+
+  .mobile-view .details-container {
+    flex-grow: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    border-bottom: 1px solid #ccc; /* Add border on the bottom */
+    padding-bottom: 20px; /* Add some padding at the bottom */
+  }
+  
+  .mobile-view .details-container {
+    margin-top: 20px;
+    overflow-x: hidden; /* Add this line */
+  }
+  
+  .mobile-view .details-container h3 {
+    margin-bottom: 10px;
+  }
+  
+  .mobile-view .details-container .date-container {
+    display: flex;
+    border-bottom: solid 0.5px rgb(28, 20, 20);
+    margin-bottom: 10px;
+  }
+  
+  .mobile-view .details-container .date-container > div {
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .mobile-view .details-container .date-container label {
+    font-weight: bold;
+  }
+  
+  .mobile-view .details-container .supervisors-container label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .mobile-view .details-container .supervisor {
+    margin-bottom: 10px;
+  }
+  
+  .mobile-view .details-container .supervisor label {
+    margin-bottom: 5px;
+  }
+  
+  .mobile-view .details-container .supervisor div {
+    display: flex;
+  }
+  
+  .mobile-view .details-container .supervisor div p {
+    margin-right: 10px;
+  }
+  
+  .mobile-view .details-container .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mobile-view .details-container img {
+    width: -webkit-fill-available;
+  }
+  
+  .mobile-view .card-container {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  /* General Styles */
+  
+  .details-container p {
+    margin-bottom: 0; /* Remove bottom margin for the last paragraph */
+  }
+  
+  .card-container {
+    flex-grow: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  
+  
+  

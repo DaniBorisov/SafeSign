@@ -1,0 +1,91 @@
+.dashboard-container{
+    display: grid;
+    grid-template-columns: repeat(2, 250px); 
+    /* Two columns */
+    grid-gap: 5px; /* Gap between cards */
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    height:100vh;
+    background-color:lightgray
+    /* width: 20vw; */
+}
+.single-card {
+    /* height: 100px; */
+    grid-column: 1 / span 2; /* Span across both columns */
+    display: flex;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 20px;
+    /* height: auto; Adjust the height based on content */
+    margin: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.dashboard-cards {
+    width: 200px;
+    height: 150px;
+    margin: 10px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+  }
+  .dashboard-cards:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+  }  
+  .single-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+  } 
+
+
+.card-content {
+    text-align: center;
+    height: auto;
+    /* flex-grow: 1; */
+  }
+
+.card-content img {
+    max-width: 100%;
+    height: auto;
+  }
+  @media (max-width: 769px) {
+    .dashboard-container {
+      flex-wrap: wrap;
+      align-items: flex-start;
+      grid-template-columns: repeat(2, 150px);
+      /* padding-top: 30px; */
+    }
+  
+    .dashboard-cards {
+      width: calc(95% - 20px);
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .dashboard-cards {
+      width: calc(100% - 10px);
+    }
+    .single-card {
+        width: calc(100% - 10px);
+      }
+  }
+
+  @media (max-height: 670px) {
+    .dashboard-cards {
+        height: calc(90% - 5px);
+    }
+    .single-card {
+        height: calc(100% - 5px);
+      }
+  }

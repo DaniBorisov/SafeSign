@@ -1,0 +1,93 @@
+<body>
+    <!-- <header>
+        <button class="back-button" onclick="goBack()">&larr; Back</button>
+        <h1>Roadworks</h1>
+    </header> -->
+
+    <div class="container">
+        <div class="input-fields" id="InputContainer">
+            <div class="location">
+                <label>Roadwork Location</label>  
+                <input type="text" placeholder="Street" [(ngModel)]="newConstructionWork.street" required>
+                <input type="text" placeholder="City" [(ngModel)]="newConstructionWork.city" required>
+            </div>
+            <div class="main-responsible">
+                <label>Main Responsible</label>
+                <input type="text" placeholder="Title">
+                <div class="name-fields">
+                    <input type="text" placeholder="First name">
+                    <input type="text" placeholder="Last name">
+                </div>
+                <input type="text" placeholder="Phone number">
+            </div>
+            <div class="first-contact">
+                <label>First Contact</label>
+                <input type="text" placeholder="Title">
+                <div class="name-fields">
+                    <input type="text" placeholder="First name">
+                    <input type="text" placeholder="Last name">
+                </div>
+                <input type="text" placeholder="Phone number">
+            </div>
+            <div class="second-contact">
+                <label>First Contact</label>
+                <input type="text" placeholder="Title">
+                <div class="name-fields">
+                    <input type="text" placeholder="First name">
+                    <input type="text" placeholder="Last name">
+                </div>
+                <input type="text" placeholder="Phone number">
+            </div>
+        </div>
+
+        <button class="confirm-button" (click)="showImageContainer()">Confirm</button>
+
+        <div class="image-container" id="imageContainer" style="display: none; ">
+            <div class="image-content">
+                <img src="../../assets/TestPlan.PNG" alt="Image">
+            </div>
+
+            <!-- Buttons for save and retake -->
+            <div class="button-row">
+                <button class="save-button">Save</button>
+                <button class="retake-button">Retake</button>
+            </div>
+
+            <!-- Label for Upload or Scan masterplan -->
+            <div class="upload-section">
+                <label>Upload or Scan masterplan</label>
+                <div class="upload-buttons">
+                    <!-- Buttons for scan with camera and upload -->
+                    <button class="scan-camera-button">Scan with Camera</button>
+                    <button class="upload-button">Upload</button>
+                </div>
+            </div>        
+        
+          <!-- Confirm button at the bottom -->
+            <div class="bottom-buttons" id="bottom-buttons" style="display: none; "> 
+                <button class="confirm-button-bottom" (click)="showSignContainer()">Confirm</button>
+                <button class="back-button-bottom" (click)="showImageContainer()">Back</button>
+            </div>
+        </div> 
+
+        <div class="signs-container" id="signsContainer" style="display: none;">
+            <div class="Qr-content">
+                <!-- Initial image -->
+                <img src="../../assets/1200px-QR_Code_Example.svg.png" alt="Qr" id="QrImage">
+            </div>
+            <!-- Buttons for Place sign and Scan Sign QR code -->
+            <div class="place-sign-buttons">
+                <button class="place-sign-button" (click)="addSign()">Place sign</button>
+                <button class="scan-qr-button">Scan Sign QR code</button>
+                <button class="place-master-button" (click)="placeOnMaster()">Place Master</button>
+            </div>                
+            <!-- Buttons for Place Next and Confirm -->
+            <div class="bottom-buttons-signs" id="bottom-buttons-signs" >
+                <button class="place-next-button">Place Next</button>
+                <button class="confirm-button-bottom" (click)="addConstructionWork()" >Confirm</button>
+            </div>
+          </div>
+
+    </div>    
+    
+</body>
