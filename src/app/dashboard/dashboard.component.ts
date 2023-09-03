@@ -14,12 +14,12 @@ export class DashboardComponent implements OnInit {
   csRetrived: boolean = false;
 
   cards = [
-    {img: '../../assets/icons8-plus.svg', content: 'New RoadWork'},
-    {img: '../../assets/icons8-close.svg', content: 'Close Roadwork'},
-    {img: '../../assets/icons8-list-48.png', content: 'Log Overview'},
-    {img: '../../assets/icons8-user-account-26.png', content: 'Contact List'},
-    {img: '../../assets/icons8-settings.svg', content: 'App Settings'},
-    {img: '../../assets/icons8-account-50.png', content: 'Account Settings'},
+    {img: './assets/icons8-plus.svg', content: 'New RoadWork'},
+    {img: './assets/icons8-close.svg', content: 'Close Roadwork'},
+    {img: './assets/icons8-list-48.png', content: 'Log Overview'},
+    {img: './assets/icons8-user-account-26.png', content: 'Contact List'},
+    {img: './assets/icons8-settings.svg', content: 'App Settings'},
+    {img: './assets/icons8-account-50.png', content: 'Account Settings'},
   ]
 
   constructionWorks: ConstructionWork[] = [];
