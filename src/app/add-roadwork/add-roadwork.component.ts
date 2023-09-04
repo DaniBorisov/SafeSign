@@ -90,17 +90,18 @@ export class AddRoadworkComponent implements OnInit {
     const payload = {
       csSite: {
         id: this.newConstructionWork.id.toString(),
+        planId: this.newConstructionWork.planId.toString(),
         city: this.newConstructionWork.city,
         street: this.newConstructionWork.street,
         startDate: this.newConstructionWork.startDate,
         endDate: this.newConstructionWork.endDate,
         mainResponsible: 'string', // Set this value as appropriate
-        signIds: this.signsData.map(sign => sign.id.toString())
+        // signIds: this.signsData.map(sign => sign.id.toString())
       },
       signs: this.signsData.map(sign => ({
         id: sign.id.toString(),
         csId: sign.csId.toString(),
-        projectId: 'string', // Set this value as appropriate
+        planId: sign.planId.toString(),
         ogAngle: sign.ogAngle,
         currAngle: sign.currAngle
       }))
@@ -131,7 +132,7 @@ export class AddRoadworkComponent implements OnInit {
     const newSign: Signs = {
       "id": newId,
       "csId": this.newConstructionWork.id,
-      "planId":  Math.floor(Math.random() * (200 - 1 + 1)) + 1,
+      "planId":  this.newConstructionWork.planId,
       "ogAngle": 60,
       "currAngle": 60,
     };
