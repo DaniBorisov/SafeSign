@@ -79,7 +79,7 @@ export class AddRoadworkComponent implements OnInit {
   placeOnMaster() {
     // document.getElementById('mainImage') as HTMLImageElement.src='../../assets/TestPlan.PNG';
     var img = document.getElementById('QrImage') as HTMLImageElement;
-    img.src = "../../assets/TestPlan.PNG"
+    img.src = "./assets/TestPlan.PNG"
   }
 
   handleConfirmCreation() {
