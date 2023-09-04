@@ -119,7 +119,7 @@ interface ConstructionWork {
   city: string;
   startDate: string;
   endDate: string;
-  status: string;
+  status?: string;
 }
 
 interface Signs {

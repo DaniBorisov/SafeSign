@@ -11,25 +11,10 @@ import * as signalR from '@microsoft/signalr';
 export class ConstructionWorkService {
   private apiUrl = 'https://safesignapi.azurewebsites.net/'; // Replace with API endpoint
   private hubConnection!: signalR.HubConnection;
-  private constructionWork: ConstructionWork[] = [];
+  // private constructionWork: ConstructionWork[] = [];
   // private signs: Signs[] = [];
 
-  // private constructionWork: ConstructionWork[] = [
-  //   {id:0,
-  //   street:'Test',
-  //   city:'Horsens',
-  //   startDate:'22.02.23',
-  //   endDate:'08.08.23',
-  //   status:'TILT',
-  //   planId: 898}]
 
-  // private signs: Signs[] = [{signId:0,
-  //   workId: 0,
-  //   issueDate: '10.05.23',
-  //   issueTime: '23:32',
-  //   issue: 'Tilt'}]
-
-  private signs: Signs[] = []
 
   private hasErrorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   hasError$ = this.hasErrorSubject.asObservable();
@@ -43,7 +28,7 @@ export class ConstructionWorkService {
       .withUrl('https://lionfunctionapp.azurewebsites.net/api/') // Replace with your SignalR hub URL
       .configureLogging(signalR.LogLevel.Information)
       .build();
-
+    
     this.hubConnection.start()
       .then(() => {
         console.log('SignalR connection started');
@@ -54,10 +39,15 @@ export class ConstructionWorkService {
       });
   }
 
+  private signUpdateSubject: BehaviorSubject<Signs> = new BehaviorSubject<Signs>({ id: 0, csId: 0, planId: 0, ogAngle: 0, currAngle: 0 });
+  signUpdate$ = this.signUpdateSubject.asObservable();
+
+
   private subscribeToSignUpdates() {
     this.hubConnection.on('signangleissue', (sign: Signs) => {
       // Handle the received sign update from SignalR
       console.log('Received sign update:', sign);
+      this.signUpdateSubject.next(sign);
       // Update your local data or trigger any necessary actions here
     });
   }
@@ -117,7 +107,7 @@ interface ConstructionWork {
   city: string;
   startDate: string;
   endDate: string;
-  status: string;
+  status?: string;
 }
 
 interface Signs {

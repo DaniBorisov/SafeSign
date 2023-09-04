@@ -1,5 +1,4 @@
 <div class="split-page" *ngIf="!isMobileView">
-
     <!-- Left Side -->     
     <div class="left-side" [ngStyle]="{'flex': leftSideFlex}">
         <div *ngIf="!selectedConstructionWork; else signsSection">
@@ -168,7 +167,7 @@
         </div>    
     </div>
     <div class="delete-button-container">
-        <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Fixed</button>
+        <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Update Angle</button>
     </div>
 </div>
 

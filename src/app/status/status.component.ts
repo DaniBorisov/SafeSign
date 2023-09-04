@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit} from '@angular/core';
 import { ConstructionWorkService } from '../construction-work.service';
 
 @Component({
@@ -7,8 +7,6 @@ import { ConstructionWorkService } from '../construction-work.service';
   styleUrls: ['./status.component.css']
 })
 export class StatusComponent implements OnInit {
-
-
   selectedConstructionWork: any;
   selectedCard: any;
   isMobileView: boolean = false;
@@ -137,30 +135,6 @@ export class StatusComponent implements OnInit {
     this.retrievedSigns = [];
   }
 
-  // hasIssues(workId: number): boolean {
-  //   // this.getSigns();
-  //   const selectedWork = this.constructionWorks.filter(work => work.id === workId);
-  //   const relatedSigns = this.allSigns.filter(sign => sign.csId === workId);
-  //   // return relatedSigns.some(sign => sign.issue.trim() !== 'None');
-  //   return relatedSigns.some(sign => {
-  //     // if (sign.issue.trim() !== 'None') {
-  //     //   console.log("sign id  : " +sign.id);
-  //     //   selectedWork[0].status == "Angle Issue";
-  //     //   return true;
-  //     // }
-  //     console.log("curr angle" + sign.currAngle)
-  //     if (sign.currAngle !== sign.ogAngle) {
-  //       sign.issue = "Angle Issue";
-  //       // console.log("/n issue " + sign.issue)
-  //       selectedWork[0].status == "Angle Issue";
-  //       return true;
-        
-  //     }
-  //     selectedWork[0].status =="OK";
-  //     return false;
-  //   });
-  // }
-
   hasIssues(workId: number): boolean {
     const selectedWork = this.constructionWorks.find(work => work.id === workId);
     const relatedSigns = this.allSigns.filter(sign => sign.csId === workId);
@@ -177,8 +151,8 @@ export class StatusComponent implements OnInit {
     });
   
     if(selectedWork)
-    selectedWork.status = hasIssue ? "Angle Issue" : "OK";
-  
+      selectedWork.status = hasIssue ? "Angle Issue" : "OK";
+
     return hasIssue;
   }
 
@@ -235,32 +209,36 @@ export class StatusComponent implements OnInit {
     if (selectedSign) {
       console.log('Updated sign id:' + Id + "  workid  " + workId); // Debug line
       console.log('Updated selectedSign:', selectedSign); // Debug line
+      console.log('Updated selected Card:',this.selectedCard); // Debug line
   
       // Set currAngle to ogAngle
       selectedSign.currAngle = selectedSign.ogAngle;
   
       this.constructionWorkService.updateSign(selectedSign)
         .subscribe(() => {
-          // Update the issue for this sign
-          if (Math.abs(selectedSign.currAngle - selectedSign.ogAngle) > 5) {
-            selectedSign.issue = "Angle Issue";
-          } else {
-            selectedSign.issue = "OK";
-          }
           console.log("Sign updated successfully!");
-  
-          // Refresh the retrievedSigns array
-          this.retrievedSigns = this.retrievedSigns.map(sign => {
-            if (sign.csId === workId && sign.id === Id) {
-              return selectedSign; // Replace the matching sign with the updated one
-            }
-            return sign; // Keep other signs unchanged
-          });
   
           // Check the angle after updating
           this.constructionWorkService.checkSignAngle(selectedSign)
             .subscribe(() => {
               console.log("Sign angle Correct!");
+
+              if (Math.abs(selectedSign.currAngle - selectedSign.ogAngle) > 5) {
+                selectedSign.issue = "Angle Issue";
+                this.selectedCard = "Angle Issue";
+              } else {
+                selectedSign.issue = "OK";
+                this.selectedCard.issue = "OK";
+                selectedSign.currAngle = selectedSign.ogAngle;
+                this.selectedCard.currAngle = this.selectedCard.ogAngle;
+              }
+              
+              this.retrievedSigns = this.retrievedSigns.map(sign => {
+                if (sign.csId === workId && sign.id === Id) {
+                  return selectedSign; // Replace the matching sign with the updated one
+                }
+                return sign; // Keep other signs unchanged
+              });
             });
         });
     }
@@ -275,7 +253,7 @@ interface ConstructionWork {
   city: string;
   startDate: string;
   endDate: string;
-  status: string;
+  status?: string;
 }
 
 interface Signs {

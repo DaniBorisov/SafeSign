@@ -1,3 +1,7 @@
+#notificationSound {
+  display: none;
+}
+
 .dashboard-container{
     display: grid;
     grid-template-columns: repeat(2, 250px); 
