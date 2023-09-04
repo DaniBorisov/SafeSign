@@ -197,29 +197,74 @@ export class StatusComponent implements OnInit {
   //   console.log(workId,signId,selectedSign[0]);
   // }
 
-  UpdateAngle(Id: number, workId: number){
-    const selectedSign = this.allSigns.filter(sign => sign.csId === workId && sign.id === Id);
-    console.log('Updated sign id:' + Id + "  workid  " + workId); // Debug line
-    console.log('Updated selectedSign:', selectedSign); // Debug line
+  // UpdateAngle(Id: number, workId: number){
+  //   const selectedSign = this.allSigns.filter(sign => sign.csId === workId && sign.id === Id);
+  //   console.log('Updated sign id:' + Id + "  workid  " + workId); // Debug line
+  //   console.log('Updated selectedSign:', selectedSign); // Debug line
 
 
-    return selectedSign.some(sign => {
-      if (sign) {
-        console.log("ANGLES Og and curr  "  +  sign.ogAngle + sign.currAngle )
-        sign.currAngle = sign.ogAngle;
-        this.constructionWorkService.updateSign(sign).subscribe(() => {
+  //   return selectedSign.some(sign => {
+  //     if (sign) {
+  //       console.log("ANGLES Og and curr  "  +  sign.ogAngle + sign.currAngle )
+  //       sign.currAngle = sign.ogAngle;
+  //       this.constructionWorkService.updateSign(sign)
+  //       .subscribe(() => {  
+  //         this.retrievedSigns = this.retrievedSigns.map(sign => {
+  //           if (Math.abs(sign.currAngle - sign.ogAngle) > 5) {
+  //             sign.issue = "Angle Issue";
+  //           } else {
+  //             sign.issue = "OK";
+  //           }
+  //         });
+  //         console.log("Sign updated successfully!");
+  //         this.hasIssues(workId);
+  //       });
+
+  //       this.constructionWorkService.checkSignAngle(sign)
+  //       .subscribe(() => {
+  //         console.log("Sign angle Correct!");
+  //       });
+  //     }
+  //   });
+
+  // }
+
+  UpdateAngle(Id: number, workId: number) {
+    const selectedSign = this.allSigns.find(sign => sign.csId === workId && sign.id === Id);
+  
+    if (selectedSign) {
+      console.log('Updated sign id:' + Id + "  workid  " + workId); // Debug line
+      console.log('Updated selectedSign:', selectedSign); // Debug line
+  
+      // Set currAngle to ogAngle
+      selectedSign.currAngle = selectedSign.ogAngle;
+  
+      this.constructionWorkService.updateSign(selectedSign)
+        .subscribe(() => {
+          // Update the issue for this sign
+          if (Math.abs(selectedSign.currAngle - selectedSign.ogAngle) > 5) {
+            selectedSign.issue = "Angle Issue";
+          } else {
+            selectedSign.issue = "OK";
+          }
           console.log("Sign updated successfully!");
-          this.hasIssues(workId);
+  
+          // Refresh the retrievedSigns array
+          this.retrievedSigns = this.retrievedSigns.map(sign => {
+            if (sign.csId === workId && sign.id === Id) {
+              return selectedSign; // Replace the matching sign with the updated one
+            }
+            return sign; // Keep other signs unchanged
+          });
+  
+          // Check the angle after updating
+          this.constructionWorkService.checkSignAngle(selectedSign)
+            .subscribe(() => {
+              console.log("Sign angle Correct!");
+            });
         });
-
-        this.constructionWorkService.checkSignAngle(sign).subscribe(() => {
-          console.log("Sign angle Correct!");
-        });
-      }
-    });
-
+    }
   }
-
 
 }
 

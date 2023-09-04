@@ -109,6 +109,8 @@ export class AddRoadworkComponent implements OnInit {
 
     this.constructionWorkService.addConstructionWork(payload)
       .subscribe(() => {
+        console.log("API call successful. Adding new ConstructionWork with signs.");
+        console.log("Payload." + payload);
         // Clear form fields after successful addition
         this.newConstructionWork = {
           id: 0,
@@ -120,7 +122,11 @@ export class AddRoadworkComponent implements OnInit {
           status: 'OK'
         };
         this.signsData = []; // Clear the signs data as well
-      });
+      },
+      error => {
+        console.error("API call failed:", error);
+      }
+      );
     console.log("diddd " + this.newConstructionWork.id)
     this.router.navigate(['/dashboard']);
   }

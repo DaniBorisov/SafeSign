@@ -32,11 +32,11 @@ export class DashboardComponent implements OnInit {
   }
 
   isStatusOK(): boolean {
-    console.log(this.csRetrived)
+    // console.log(this.csRetrived)
     if (this.csRetrived)
     {
       for (let work of this.constructionWorks) {
-        console.log("work with id " + work.id + " has staus : " + work.status)
+        // console.log("work with id " + work.id + " has staus : " + work.status)
         if ( work.status == undefined) 
           break
         if (work.status !== 'OK' && work.status !== undefined) {
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // subscribeToChanges(): void {
-  //   const changesEndpoint = 'http://localhost:3000/api/changes'; // Change to your API endpoint
+  //   const changesEndpoint = 'safesignsignalr.service.signalr.net'; // Change to your API endpoint
   //   const eventSource = new EventSource(changesEndpoint);
 
   //   eventSource.onmessage = (event) => {
@@ -63,13 +63,13 @@ export class DashboardComponent implements OnInit {
     this.constructionWorkService.getAllConstructionWork()
       .subscribe((works: ConstructionWork[]) => {
         this.constructionWorks = works;
-        console.log("COnstruction works subscribe ")
+        // console.log("COnstruction works subscribe ")
         // Iterate through constructionWorks to update status
         for (let work of this.constructionWorks) {
           this.constructionWorkService.getSignsByWorkId(work.id)
             .subscribe((signs: Signs[]) => {
               const hasAngleIssue = signs.some(sign => Math.abs(sign.ogAngle - sign.currAngle) > 5);
-              console.log("sign  subscribe ")
+              // console.log("sign  subscribe ")
               if (hasAngleIssue) {
                 work.status = 'Angle issue';
               } else {

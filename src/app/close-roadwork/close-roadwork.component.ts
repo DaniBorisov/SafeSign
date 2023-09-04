@@ -31,13 +31,18 @@ export class CloseRoadworkComponent implements OnInit {
     getConstructionWorks() {
     this.constructionWorkService.getAllConstructionWork()
       .subscribe((works: ConstructionWork[]) => {
+        console.log("API call successful. Getting all Construction works (Close Roadworks).");
         this.constructionWorks = works;
-      });
+      },
+      error => {
+        console.error("API call failed:", error);
+      }
+      );
   }
 
   deleteConstructionWork(selectedWork: ConstructionWork) {
     console.log("Deleting construction work, selected work id: " + selectedWork.id);
-  
+    console.log("ConstructionWorks before deletion:", this.constructionWorks);
     this.constructionWorkService.deleteConstructionWork(selectedWork.id)
       .subscribe(() => {
           console.log("API call successful. Removing from constructionWorks array.");
@@ -48,8 +53,7 @@ export class CloseRoadworkComponent implements OnInit {
           console.error("API call failed:", error);
         }
       );
-    this.constructionWorks = this.constructionWorks.filter(work => work.id !== selectedWork.id);
-    console.log("ConstructionWorks before deletion:", this.constructionWorks);
+    // this.constructionWorks = this.constructionWorks.filter(work => work.id !== selectedWork.id);
     this.selectedCard = null;  
   }
 

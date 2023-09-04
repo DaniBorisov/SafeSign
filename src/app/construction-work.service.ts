@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import * as signalR from '@microsoft/signalr';
 
 
 @Injectable({
@@ -9,15 +10,18 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export class ConstructionWorkService {
   private apiUrl = 'https://safesignapi.azurewebsites.net/'; // Replace with API endpoint
+  private hubConnection!: signalR.HubConnection;
+  private constructionWork: ConstructionWork[] = [];
+  // private signs: Signs[] = [];
 
-  private constructionWork: ConstructionWork[] = [
-    {id:0,
-    street:'Test',
-    city:'Horsens',
-    startDate:'22.02.23',
-    endDate:'08.08.23',
-    status:'TILT',
-    planId: 898}]
+  // private constructionWork: ConstructionWork[] = [
+  //   {id:0,
+  //   street:'Test',
+  //   city:'Horsens',
+  //   startDate:'22.02.23',
+  //   endDate:'08.08.23',
+  //   status:'TILT',
+  //   planId: 898}]
 
   // private signs: Signs[] = [{signId:0,
   //   workId: 0,
@@ -27,11 +31,39 @@ export class ConstructionWorkService {
 
   private signs: Signs[] = []
 
-  constructor(private http: HttpClient) { }
-
   private hasErrorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   hasError$ = this.hasErrorSubject.asObservable();
 
+  constructor(private http: HttpClient) {
+    this.initializeSignalR();
+   }
+
+  private initializeSignalR() {
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl('https://lionfunctionapp.azurewebsites.net/api/') // Replace with your SignalR hub URL
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
+
+    this.hubConnection.start()
+      .then(() => {
+        console.log('SignalR connection started');
+        this.subscribeToSignUpdates(); // Subscribe to SignalR events
+      })
+      .catch((error) => {
+        console.error('Error while starting SignalR connection:', error);
+      });
+  }
+
+  private subscribeToSignUpdates() {
+    this.hubConnection.on('signangleissue', (sign: Signs) => {
+      // Handle the received sign update from SignalR
+      console.log('Received sign update:', sign);
+      // Update your local data or trigger any necessary actions here
+    });
+  }
+
+
+  
   setHasError(hasError: boolean) {
     this.hasErrorSubject.next(hasError);
   }
