@@ -3,7 +3,7 @@
     <div class="left-side" [ngStyle]="{'flex': leftSideFlex}">
         <div *ngIf="!selectedConstructionWork; else signsSection">
             <input type="text" class="search-bar" placeholder="Search" [(ngModel)]="searchText">
-            <div *ngFor="let work of filteredConstructionWorks" (click)="retrieveSignsByWorkId(work)" class="card">
+            <div *ngFor="let work of filteredConstructionWorks" (click)="retrieveSignsByWorkId(work)" class="card" >
                 <div class="card-body">
                     <h1 class="card-title">{{ work.street }} - {{ work.city }}
                         <img src="./assets/icons8-error.gif" *ngIf="hasIssues(work.id)" style="height: 30px; padding-left: 30px">
@@ -35,11 +35,23 @@
                 <div class="sign-cards">
                     <div *ngFor="let sign of retrievedSigns" (click)="showDetails(sign)" class="sign-card">
                         <div class="card-body">
-                            <div class="card-details">
+                            <div class="card-details-signs">
                                 <div class="column">
-                                    <p>{{ sign.ogAngle }}</p>
-                                    <p>{{ sign.currAngle }}</p>
+                                    <label>X axis</label>
+                                    <p>{{ sign.ogX }}</p>
+                                    <p>{{ sign.currX }}</p>
                                 </div>
+                                <div class="column">
+                                    <label>Y axis</label>
+                                    <p>{{ sign.ogY }}</p>
+                                    <p>{{ sign.currY }}</p>
+                                </div>
+                                <div class="column">
+                                    <label>Z axis</label>
+                                    <p>{{ sign.ogZ }}</p>
+                                    <p>{{ sign.currZ }}</p>
+                                </div>
+                                
                                 <div class="column">
                                     <label>Sign</label>
                                     <p>{{ sign.id }}</p>
@@ -71,6 +83,17 @@
             <h3>{{ selectedConstructionWork.city }} - {{ selectedConstructionWork.street }}</h3>
             <div class="date-container">
                 <div class="dates">
+                    <label>X axis</label>
+                    <p>{{ selectedCard.ogAngle }}</p>
+                    <p>{{ selectedCard.currAngle }}</p>
+                </div>
+                <div class="dates">
+                    <label>Y axis</label>
+                    <p>{{ selectedCard.ogAngle }}</p>
+                    <p>{{ selectedCard.currAngle }}</p>
+                </div>
+                <div class="dates">
+                    <label>Z axis</label>
                     <p>{{ selectedCard.ogAngle }}</p>
                     <p>{{ selectedCard.currAngle }}</p>
                 </div>

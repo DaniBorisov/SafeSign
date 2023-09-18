@@ -30,7 +30,7 @@
                 <input type="text" placeholder="Phone number">
             </div>
             <div class="second-contact">
-                <label>First Contact</label>
+                <label>Second Contact</label>
                 <input type="text" placeholder="Title">
                 <div class="name-fields">
                     <input type="text" placeholder="First name">
@@ -73,17 +73,25 @@
         <div class="signs-container" id="signsContainer" style="display: none;">
             <div class="Qr-content">
                 <!-- Initial image -->
-                <img src="./assets/1200px-QR_Code_Example.svg.png" alt="Qr" id="QrImage">
+                <!-- <img src="./assets/1200px-QR_Code_Example.svg.png" alt="Qr" id="QrImage"> -->
+              <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event, action)"></ngx-scanner-qrcode>     
             </div>
             <!-- Buttons for Place sign and Scan Sign QR code -->
             <div class="place-sign-buttons">
-                <button class="place-sign-button" (click)="addSign()">Place sign</button>
-                <button class="scan-qr-button">Scan Sign QR code</button>
+                <div *ngIf="qrCodeResult">
+                    <p>QR Code Result:</p>
+                    <p>{{ qrCodeResult }}</p>
+                </div>
+                <button class="place-sign-button" (click)="addSign()" *ngIf="qrCodeResult || macAddress">Place sign</button>
+                <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" 
+                *ngIf="!action.isStart" (click)="handle(action, 'start')" >Scan Sign QR code</button>
+                <input type="text" [(ngModel)]="macAddress" placeholder="Enter MAC Address" *ngIf="!isMobileView">
+                <!-- <button class="scan-qr-button" (click)="startScanning()">Scan Sign QR code</button> -->
                 <button class="place-master-button" (click)="placeOnMaster()">Place Master</button>
             </div>                
             <!-- Buttons for Place Next and Confirm -->
             <div class="bottom-buttons-signs" id="bottom-buttons-signs" >
-                <button class="place-next-button">Place Next</button>
+                <button class="place-next-button" (click)="placeNext()">Place Next</button>
                 <button class="confirm-button-bottom" (click)="addConstructionWork()" >Confirm</button>
             </div>
           </div>

@@ -1,19 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Subject } from 'rxjs';
+
 import { ConstructionWorkService } from '../construction-work.service';
+import { ModelsStatesService } from '../models-states.service';
+import { WebcamImage, WebcamInitError } from 'ngx-webcam';
+import { NgxScannerQrcodeService,ScannerQRCodeResult,NgxScannerQrcodeComponent ,ScannerQRCodeConfig } from 'ngx-scanner-qrcode';
 
 @Component({
   selector: 'app-add-roadwork',
   templateUrl: './add-roadwork.component.html',
   styleUrls: ['./add-roadwork.component.css']
 })
+
+
 export class AddRoadworkComponent implements OnInit {
 
-  constructor(private router: Router,private constructionWorkService: ConstructionWorkService) { }
+  public config: ScannerQRCodeConfig = {
+    constraints: {
+      video: {
+        width: window.innerWidth
+      },
+    },
+  };
+
+  macAddress: string = ''; 
+  
+  @ViewChild('action') action!: NgxScannerQrcodeComponent;
+
+  constructor(
+    private router: Router,
+    private constructionWorkService: ConstructionWorkService,
+    private qrcode: NgxScannerQrcodeService,
+    private modelsService: ModelsStatesService,
+    ) { }
 
   showImageCont: boolean = false;
   showSignCont: boolean = false;
+  isScanning: boolean = false;
+
+  isMobileView: boolean = false;
+
+  qrCodeResult: string | null = null;
 
   newConstructionWork: ConstructionWork = {
     "id": Math.floor(Math.random() * (50 - 1 + 1)) + 1,
@@ -22,16 +51,63 @@ export class AddRoadworkComponent implements OnInit {
     "city": '',
     "startDate": '10.07.23',
     "endDate": '28.08.23',
-    "status": ''
+    "status": false
   };
 
   signsData: Signs[] = [];
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isMobileView = window.innerWidth <= 769; // Adjust the breakpoint as needed
+  }
+
   ngOnInit(): void {
+    this.isMobileView = window.innerWidth <= 768;
+  }
+
+  ngAfterViewInit(): void {
+    this.action.isReady.subscribe((res: any) => {
+      // this.handle(this.action, 'start');
+    });
   }
 
   headerText: string = 'New Roadwork';
   showBackArrow: boolean = true;
+
+  public onEvent(e: ScannerQRCodeResult[], action?: any): void {
+    if (e && e.length > 0) {
+      this.qrCodeResult = e[0].value;
+      const macRegex = /MAC:([^,]+)/; // Define a regular expression to match MAC address
+      const match = this.qrCodeResult.match(macRegex);
+
+      if (match && match[1]) {
+        this.macAddress = match[1]; // Extract the MAC address
+        console.log("MAC Address:", this.macAddress);
+        console.log("event:", e);
+        action.stop();
+      } else {
+        console.log("MAC address not found in the QR code result.");
+        console.log("event:", e);
+      }
+    } else {
+      console.log("No QR code data available.");
+    }
+  }
+
+  public handle(action: any, fn: string): void {
+    // Fix issue #27, #29
+    const playDeviceFacingBack = (devices: any[]) => {
+      // front camera or back camera check here!
+      const device = devices.find(f => (/back|rear|environment/gi.test(f.label))); // Default Back Facing Camera
+      action.playDevice(device ? device.deviceId : devices[0].deviceId);
+    }
+
+    if (fn === 'start') {
+      action[fn](playDeviceFacingBack).subscribe((r: any) => console.log(fn, r), alert);
+    } else {
+      action[fn]().subscribe((r: any) => console.log(fn, r), alert);
+    }
+  }
 
   showImageContainer() {
     const imageContainer = document.getElementById("imageContainer") as HTMLElement;
@@ -82,6 +158,12 @@ export class AddRoadworkComponent implements OnInit {
     img.src = "./assets/TestPlan.PNG"
   }
 
+  placeNext() {
+    this.qrCodeResult = null;
+    this.macAddress = '';
+    // Add logic to hide elements or reset any other relevant data
+  }
+
   handleConfirmCreation() {
     this.router.navigate(['/dashboard']);
   }
@@ -96,21 +178,25 @@ export class AddRoadworkComponent implements OnInit {
         startDate: this.newConstructionWork.startDate,
         endDate: this.newConstructionWork.endDate,
         mainResponsible: 'string', // Set this value as appropriate
-        // signIds: this.signsData.map(sign => sign.id.toString())
+        // status: true,
       },
       signs: this.signsData.map(sign => ({
         id: sign.id.toString(),
         csId: sign.csId.toString(),
         planId: sign.planId.toString(),
-        ogAngle: sign.ogAngle,
-        currAngle: sign.currAngle
+        sensorId: sign.sensorId,
+        issue: "None"
+        // ogAngle: sign.ogAngle,
+        // currAngle: sign.currAngle
       }))
     };
 
-    this.constructionWorkService.addConstructionWork(payload)
+    this.constructionWorkService.addConstructionWorkwithSignsSensors(payload)
       .subscribe(() => {
         console.log("API call successful. Adding new ConstructionWork with signs.");
         console.log("Payload." + payload);
+        const updatedConstructionWorks = [...this.modelsService.getConstructionWorks(), this.newConstructionWork];
+        this.modelsService.setConstructionWorks(updatedConstructionWorks);
         // Clear form fields after successful addition
         this.newConstructionWork = {
           id: 0,
@@ -119,15 +205,16 @@ export class AddRoadworkComponent implements OnInit {
           city: '',
           startDate: '',
           endDate: '',
-          status: 'OK'
+          status: false
         };
         this.signsData = []; // Clear the signs data as well
+
       },
       error => {
         console.error("API call failed:", error);
       }
       );
-    console.log("diddd " + this.newConstructionWork.id)
+
     this.router.navigate(['/dashboard']);
   }
 
@@ -141,9 +228,20 @@ export class AddRoadworkComponent implements OnInit {
       "planId":  this.newConstructionWork.planId,
       "ogAngle": 60,
       "currAngle": 60,
+      "sensorId": this.macAddress,
     };
+    const updatedsigns = [...this.modelsService.getSigns(), newSign];
+    this.modelsService.setSigns(updatedsigns);
+    console.log("psuh new sign into storage",updatedsigns)
     this.signsData.push(newSign);
   }
+
+  // getSigns() {
+  //   this.constructionWorkService.getAllSigns()
+  //     .subscribe((signs: Signs1[]) => {
+  //       this.modelsService.setSigns(signs);
+  //    });
+  // }
 
 }
 
@@ -154,13 +252,14 @@ interface ConstructionWork {
   city: string;
   startDate: string;
   endDate: string;
-  status: string;
+  status: boolean;
 }
 
 interface Signs {
   id: number;
   csId: number;
   planId: number;
+  sensorId: string;
   ogAngle: number;
   currAngle: number;
   issue?: string;

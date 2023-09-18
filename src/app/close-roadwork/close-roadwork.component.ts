@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ChangeDetectorRef, /* other imports */ } from '@angular/core';
 import { ConstructionWorkService } from '../construction-work.service';
 
 @Component({
@@ -19,11 +18,25 @@ export class CloseRoadworkComponent implements OnInit {
   constructionWorks: ConstructionWork[] = [];
   searchText: string = '';
 
-  constructor(private constructionWorkService: ConstructionWorkService , private cdRef: ChangeDetectorRef) { }
+  constructor(private constructionWorkService: ConstructionWorkService ) { }
 
 
   ngOnInit(): void {
-    this.getConstructionWorks();
+    // this.getConstructionWorks();
+
+    const constructionWorksData = sessionStorage.getItem('constructionWorks');
+    const signsData = sessionStorage.getItem('signs');
+  
+    if (constructionWorksData) {
+      // Data is available in SessionStorage, parse and use it
+      this.constructionWorks = JSON.parse(constructionWorksData);
+      // this.getSigns(); // You can call getSigns() here if needed
+    } else {
+      // Data is not available, make API calls to fetch it
+      // this.getConstructionWorks();
+      // this.getSigns(); // You can call getSigns() here if needed
+    }
+
     this.checkViewport()
   }
 
@@ -119,7 +132,7 @@ interface ConstructionWork {
   city: string;
   startDate: string;
   endDate: string;
-  status?: string;
+  status: boolean;
 }
 
 interface Signs {
@@ -129,5 +142,10 @@ interface Signs {
   ogAngle: number;
   currAngle: number;
   issue?: string;
+  ogX?: number;
+  ogY?: number;
+  ogZ?: number;
+  currX?: number;
+  currY?: number;
+  currZ?: number;
 }
-

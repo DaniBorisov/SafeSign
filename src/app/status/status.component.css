@@ -36,10 +36,25 @@
     flex-basis: 32.33%;
     /* padding: 0 10px; */
   }
-  
+
   .card-details .column label {
     font-weight: bold;
   }
+
+  .card-details-signs {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .card-details-signs .column {
+    flex-basis: 15.33%;
+    padding: 0 5px;
+  }
+
+  .card-details-signs .column label {
+    font-weight: bold;
+  }
+  
   
   .card {
     cursor: pointer;
@@ -59,17 +74,16 @@
     content: "";
     position: absolute;
     top: 0;
-    right: 1px;
+    right: 0.1px;
     bottom: 0;
     width: 20px; /* Adjust the width as needed */
-    background-color: Yellow; /* Set the background color to yellow */
-    border-radius: 20px 900px 900px 20px; /* Adjust the border radius to match the card */
+    background-color: yellow; /*Set the background color to yellow */
+    border-radius: 20px 900px 900px 50px; /* Adjust the border radius to match the card */
     background-image: url(../../assets/icons8-forward-24.png); /* Replace 'path/to/arrow-image.png' with the actual path to your arrow image */
     background-repeat: no-repeat;
     background-position: center;
   }
-  
-  
+    
   .sign-card {
     cursor: pointer;
     padding: 10px;
@@ -133,12 +147,13 @@
   }
   
   
-  
   .date-container {
     display: grid;
-    grid-template-columns: repeat(2, 250px); 
+    grid-template-columns: repeat(4, 15vw); 
     border-bottom: solid .5px rgb(28, 20, 20);
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: space-evenly;
+    justify-items: center;
   }
   
   .date-container > div {

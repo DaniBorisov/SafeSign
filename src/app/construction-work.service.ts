@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable} from 'rxjs';
 import * as signalR from '@microsoft/signalr';
+
+import { ModelsStatesService } from './models-states.service';
 
 
 @Injectable({
@@ -19,7 +21,7 @@ export class ConstructionWorkService {
   private hasErrorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   hasError$ = this.hasErrorSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private modelsStates: ModelsStatesService ) {
     this.initializeSignalR();
    }
 
@@ -33,6 +35,7 @@ export class ConstructionWorkService {
       .then(() => {
         console.log('SignalR connection started');
         this.subscribeToSignUpdates(); // Subscribe to SignalR events
+        this.subscribeToSensorUpdate();
       })
       .catch((error) => {
         console.error('Error while starting SignalR connection:', error);
@@ -42,8 +45,13 @@ export class ConstructionWorkService {
   private signUpdateSubject: BehaviorSubject<Signs> = new BehaviorSubject<Signs>({ id: 0, csId: 0, planId: 0, ogAngle: 0, currAngle: 0 });
   signUpdate$ = this.signUpdateSubject.asObservable();
 
+  private sensorUpdateSubject: BehaviorSubject<Sensor> = new BehaviorSubject<Sensor>({ id: "", CSId: "", PlanId: "",  OgAngle: 0, CurrAngle: 0, Issue: "",
+      SensorId: "", Type: 0, OgX: 0, OgY: 0, OgZ:0, CurrX: 0, CurrY: 0, CurrZ: 0 });
+  sensorUpdate$ = this.sensorUpdateSubject.asObservable();
+
 
   private subscribeToSignUpdates() {
+    console.log('SignUpdate subribed');
     this.hubConnection.on('signangleissue', (sign: Signs) => {
       // Handle the received sign update from SignalR
       console.log('Received sign update:', sign);
@@ -51,6 +59,17 @@ export class ConstructionWorkService {
       // Update your local data or trigger any necessary actions here
     });
   }
+
+  private subscribeToSensorUpdate() {
+    console.log('SensorUpdate subsribed');
+    this.hubConnection.on('signpositionissue', (sensor: Sensor) => {
+      // Handle the received sign update from SignalR
+      console.log('Received Sensor update:', sensor);
+      this.sensorUpdateSubject.next(sensor);
+      // Update your local data or trigger any necessary actions here
+    });
+  }
+
 
 
   
@@ -60,6 +79,10 @@ export class ConstructionWorkService {
 
   addConstructionWork(payload: any): Observable<any> {
     return this.http.post(this.apiUrl + 'ConstructionSite/fullPackage', payload);
+  }
+
+  addConstructionWorkwithSignsSensors(payload: any): Observable<any> {
+    return this.http.post(this.apiUrl + 'ConstructionSite/sensor', payload);
   }
 
 
@@ -78,6 +101,13 @@ export class ConstructionWorkService {
   getAllConstructionWork(): Observable<ConstructionWork[]> {
     return this.http.get<ConstructionWork[]>(this.apiUrl + 'ConstructionSite');
   }
+
+  // getAllConstructionWork(): void {
+  //   this.http.get<ConstructionWork[]>(this.apiUrl + 'ConstructionSite')
+  //     .subscribe((constructionWorks: ConstructionWork[]) => {
+  //       this.modelsStates.setConstructionWorks(constructionWorks);
+  //     });
+  // }
 
 
   getSignsByWorkId(workId: number): Observable<Signs[]> {
@@ -107,7 +137,7 @@ interface ConstructionWork {
   city: string;
   startDate: string;
   endDate: string;
-  status?: string;
+  status: boolean;
 }
 
 interface Signs {
@@ -123,4 +153,21 @@ interface Plan {
   id: string;
   csId: string;
   responsible: string;
+}
+
+interface Sensor {
+  id: string;
+  CSId: string;
+  PlanId: string;
+  OgAngle: number;
+  CurrAngle: number;
+  Issue: string;
+  SensorId: string;
+  Type: number;
+  OgX: number;
+  OgY: number;
+  OgZ: number;
+  CurrX: number;
+  CurrY: number;
+  CurrZ: number;
 }

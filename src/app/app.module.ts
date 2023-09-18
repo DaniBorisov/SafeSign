@@ -11,6 +11,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { StatusComponent } from './status/status.component';
 
+import { WebcamModule } from 'ngx-webcam';
+import { NgxScannerQrcodeModule } from 'ngx-scanner-qrcode';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +28,8 @@ import { StatusComponent } from './status/status.component';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
+    WebcamModule,
+    NgxScannerQrcodeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
