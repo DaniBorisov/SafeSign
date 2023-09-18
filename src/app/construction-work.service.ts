@@ -16,8 +16,6 @@ export class ConstructionWorkService {
   // private constructionWork: ConstructionWork[] = [];
   // private signs: Signs[] = [];
 
-
-
   private hasErrorSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   hasError$ = this.hasErrorSubject.asObservable();
 
@@ -42,7 +40,7 @@ export class ConstructionWorkService {
       });
   }
 
-  private signUpdateSubject: BehaviorSubject<Signs> = new BehaviorSubject<Signs>({ id: 0, csId: 0, planId: 0, ogAngle: 0, currAngle: 0 });
+  private signUpdateSubject: BehaviorSubject<Signs> = new BehaviorSubject<Signs>({ id: 0, csId: 0, planId: 0, ogAngle: 0, currAngle: 0, issue: '' });
   signUpdate$ = this.signUpdateSubject.asObservable();
 
   private sensorUpdateSubject: BehaviorSubject<Sensor> = new BehaviorSubject<Sensor>({ id: "", CSId: "", PlanId: "",  OgAngle: 0, CurrAngle: 0, Issue: "",
@@ -70,16 +68,13 @@ export class ConstructionWorkService {
     });
   }
 
-
-
-  
   setHasError(hasError: boolean) {
     this.hasErrorSubject.next(hasError);
   }
-
-  addConstructionWork(payload: any): Observable<any> {
-    return this.http.post(this.apiUrl + 'ConstructionSite/fullPackage', payload);
-  }
+  // NOT USING ANYMORE
+  // addConstructionWork(payload: any): Observable<any> {
+  //   return this.http.post(this.apiUrl + 'ConstructionSite/fullPackage', payload);
+  // }
 
   addConstructionWorkwithSignsSensors(payload: any): Observable<any> {
     return this.http.post(this.apiUrl + 'ConstructionSite/sensor', payload);
@@ -91,24 +86,10 @@ export class ConstructionWorkService {
     return this.http.delete(this.apiUrl + `ConstructionSite/${workId}`);
   }
 
-  // Get Construction Work by ID
-  // getConstructionWorkById(workId: number): Observable<ConstructionWork> {
-  //   return this.http.get<ConstructionWork>(this.apiUrl + `plan/${workId}`);
-  // }
-
-
   // Get All Construction Work
   getAllConstructionWork(): Observable<ConstructionWork[]> {
     return this.http.get<ConstructionWork[]>(this.apiUrl + 'ConstructionSite');
   }
-
-  // getAllConstructionWork(): void {
-  //   this.http.get<ConstructionWork[]>(this.apiUrl + 'ConstructionSite')
-  //     .subscribe((constructionWorks: ConstructionWork[]) => {
-  //       this.modelsStates.setConstructionWorks(constructionWorks);
-  //     });
-  // }
-
 
   getSignsByWorkId(workId: number): Observable<Signs[]> {
     return this.http.get<Signs[]>(this.apiUrl + `sign/cs/${workId}`);
@@ -146,13 +127,7 @@ interface Signs {
   planId: number;
   ogAngle: number;
   currAngle: number;
-  issue?: string;
-}
-
-interface Plan {
-  id: string;
-  csId: string;
-  responsible: string;
+  issue: string;
 }
 
 interface Sensor {

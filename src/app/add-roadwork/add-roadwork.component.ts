@@ -1,8 +1,6 @@
 import { Component, OnInit,ViewChild,HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Subject } from 'rxjs';
-
 import { ConstructionWorkService } from '../construction-work.service';
 import { ModelsStatesService } from '../models-states.service';
 import { WebcamImage, WebcamInitError } from 'ngx-webcam';
@@ -170,7 +168,7 @@ export class AddRoadworkComponent implements OnInit {
 
   addConstructionWork() {
     const payload = {
-      csSite: {
+      cSite: {
         id: this.newConstructionWork.id.toString(),
         planId: this.newConstructionWork.planId.toString(),
         city: this.newConstructionWork.city,
@@ -185,7 +183,7 @@ export class AddRoadworkComponent implements OnInit {
         csId: sign.csId.toString(),
         planId: sign.planId.toString(),
         sensorId: sign.sensorId,
-        issue: "None"
+        issue: sign.issue
         // ogAngle: sign.ogAngle,
         // currAngle: sign.currAngle
       }))
@@ -229,20 +227,13 @@ export class AddRoadworkComponent implements OnInit {
       "ogAngle": 60,
       "currAngle": 60,
       "sensorId": this.macAddress,
+      "issue": "OK"
     };
     const updatedsigns = [...this.modelsService.getSigns(), newSign];
     this.modelsService.setSigns(updatedsigns);
     console.log("psuh new sign into storage",updatedsigns)
     this.signsData.push(newSign);
   }
-
-  // getSigns() {
-  //   this.constructionWorkService.getAllSigns()
-  //     .subscribe((signs: Signs1[]) => {
-  //       this.modelsService.setSigns(signs);
-  //    });
-  // }
-
 }
 
 interface ConstructionWork {
@@ -262,5 +253,5 @@ interface Signs {
   sensorId: string;
   ogAngle: number;
   currAngle: number;
-  issue?: string;
+  issue: string;
 }

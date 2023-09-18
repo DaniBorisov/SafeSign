@@ -106,15 +106,23 @@ retrieveSignsByWorkId(card: any) {
     let hasIssue = false;
 
     relatedSigns.forEach(sign => {
-      if (Math.abs(sign.currAngle - sign.ogAngle) > 5 ||
-          Math.abs(sign.currX! - sign.ogX!) > 20 ||
-          Math.abs(sign.currY! - sign.ogY!) > 20 ||
-          Math.abs(sign.currZ! - sign.ogZ!) > 20 ) {
-        sign.issue = "Angle Issue";
+      console.log("STATUS HAS ISSUEz SIGN ISSUE: " , sign.issue)
+      if (sign.issue !== "OK" && sign.issue !== null)
+      {
         hasIssue = true;
-      } else {
+      }
+      else{
         sign.issue = "OK";
-      }   
+      }
+      // if (Math.abs(sign.currAngle - sign.ogAngle) > 5 ||
+      //     Math.abs(sign.currX! - sign.ogX!) > 20 ||
+      //     Math.abs(sign.currY! - sign.ogY!) > 20 ||
+      //     Math.abs(sign.currZ! - sign.ogZ!) > 20 ) {
+      //   // sign.issue = "Angle Issue";
+      //   hasIssue = true;
+      // } else {
+      //   sign.issue = "OK";
+      // }   
     });
   
     if(selectedWork){
@@ -133,28 +141,45 @@ retrieveSignsByWorkId(card: any) {
   
       // Set currAngle to ogAngle
       selectedSign.currAngle = selectedSign.ogAngle;
+      selectedSign.currX = selectedSign.ogX;
+      selectedSign.currY = selectedSign.ogY;
+      selectedSign.currZ = selectedSign.ogZ;
+      selectedSign.issue = "OK";
+
   
       this.constructionWorkService.updateSign(selectedSign)
         .subscribe(() => {
           console.log("Sign updated successfully!");
+          
   
           // Check the angle after updating
           this.constructionWorkService.checkSignAngle(selectedSign)
             .subscribe(() => {
               console.log("Sign angle Correct!");
 
-              if (Math.abs(selectedSign.currAngle - selectedSign.ogAngle) > 5) {
+              console.log("+++++++++++++  issue ======" ,selectedSign.issue )
+              if (selectedSign.issue === "Angle Issue")
+              {
                 selectedSign.issue = "Angle Issue";
                 this.selectedCard.issue = "Angle Issue";
-              } else {
+              }
+              else
+              {
                 selectedSign.issue = "OK";
                 this.selectedCard.issue = "OK";
                 selectedSign.currAngle = selectedSign.ogAngle;
                 this.selectedCard.currAngle = this.selectedCard.ogAngle;
+                selectedSign.currX = selectedSign.ogX;
+                this.selectedCard.currX = this.selectedCard.ogX;
+                selectedSign.currY = selectedSign.ogY;
+                this.selectedCard.currY = this.selectedCard.ogY;
+                selectedSign.currX = selectedSign.ogX;
+                this.selectedCard.currZ = this.selectedCard.ogZ;
               }
               
               this.retrievedSigns = this.retrievedSigns.map(sign => {
                 if (sign.csId === workId && sign.id === Id) {
+                  console.log(" LOG FOR Updated selected sign objrect" ,selectedSign );
                   return selectedSign; // Replace the matching sign with the updated one
                 }
                 return sign; // Keep other signs unchanged
@@ -248,7 +273,7 @@ interface Signs {
   planId: number;
   ogAngle: number;
   currAngle: number;
-  issue?: string;
+  issue: string;
   ogX?: number;
   ogY?: number;
   ogZ?: number;
@@ -256,47 +281,3 @@ interface Signs {
   currY?: number;
   currZ?: number;
 }
-
-
-// using local objects
-
-  // getConstructionWorks() {
-  //   this.constructionWorkService.getAllConstructionWork()
-  //     .subscribe((works: ConstructionWork[]) => {
-  //       this.constructionWorks = works
-  //       console.log("get all C Works" +this.constructionWorks);
-  //     });
-  // }
-
-  // getSigns() {
-  //   this.constructionWorkService.getAllSigns()
-  //     .subscribe((signs: Signs[]) => {
-  //       this.allSigns = signs.map(sign => ({ ...sign, issue: 'OK' }));
-  //       console.log("get all signs : " + this.allSigns[0].issue);
-  //       this.constructionWorks.forEach(work => {
-  //         if (this.hasIssues(work.id)) {
-  //           work.status = "Angle Issue";
-  //         }
-  //       });
-  //     });
-  // }
-
-
-
-  // retrieveSignsByWorkId(card: any) {
-  //   this.selectedConstructionWork = card;
-  //   this.constructionWorkService.getSignsByWorkId(card.id)
-  //     .subscribe((signs) => {
-  //       this.retrievedSigns = signs.map(sign => {
-  //         if (Math.abs(sign.currAngle - sign.ogAngle) > 5) {
-  //           sign.issue = "Angle Issue";
-  //         } else {
-  //           sign.issue = "OK";
-  //         }
-  //         return sign;
-  //       });
-  
-  //       // Update the issue and status fields for the selected construction work
-  //       this.selectedConstructionWork.status = this.retrievedSigns.some(sign => sign.issue === "Angle Issue") ? "Angle Issue" : "OK";
-  //     });
-  // }
