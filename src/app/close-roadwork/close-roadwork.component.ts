@@ -30,11 +30,6 @@ export class CloseRoadworkComponent implements OnInit {
     if (constructionWorksData) {
       // Data is available in SessionStorage, parse and use it
       this.constructionWorks = JSON.parse(constructionWorksData);
-      // this.getSigns(); // You can call getSigns() here if needed
-    } else {
-      // Data is not available, make API calls to fetch it
-      // this.getConstructionWorks();
-      // this.getSigns(); // You can call getSigns() here if needed
     }
 
     this.checkViewport()
@@ -82,11 +77,6 @@ export class CloseRoadworkComponent implements OnInit {
     const leftSideWidth = ((x / splitPageWidth) * 100).toFixed(2);
     this.leftSideFlex = `0 0 ${leftSideWidth}%`;
     this.rightSideFlex = `1 1 ${100 - Number(leftSideWidth)}%`;
-    // const splitPageWidth = document.querySelector('.split-page')?.clientWidth || 0;
-    // const x = event.pageX;
-    // const leftSideWidth = ((x / splitPageWidth) * 100).toFixed(2);
-    // this.leftSideWidth = `${leftSideWidth}%`;
-    // this.rightSideWidth = `${100 - Number(leftSideWidth)}%`;
   };
 
   stopResize = () => {

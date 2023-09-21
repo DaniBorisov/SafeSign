@@ -53,8 +53,6 @@ export class ModelsStatesService {
 
   getSignsByWorkID(workId: number):Signs[] {
     const allSigns = this.signsSubject.value;
-    // console.log("all signs from shared sercice")
-    // console.log(allSigns)
     return allSigns.filter(sign => sign.csId === workId);
   }
 

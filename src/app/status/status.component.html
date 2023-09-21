@@ -37,19 +37,19 @@
                         <div class="card-body">
                             <div class="card-details-signs">
                                 <div class="column">
-                                    <label>X axis</label>
+                                    <label [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >X axis</label>
                                     <p>{{ sign.ogX }}</p>
-                                    <p>{{ sign.currX }}</p>
+                                    <p [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >{{ sign.currX }}</p>
                                 </div>
                                 <div class="column">
-                                    <label>Y axis</label>
+                                    <label [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >Y axis</label>
                                     <p>{{ sign.ogY }}</p>
-                                    <p>{{ sign.currY }}</p>
+                                    <p [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >{{ sign.currY }}</p>
                                 </div>
                                 <div class="column">
-                                    <label>Z axis</label>
+                                    <label [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >Z axis</label>
                                     <p>{{ sign.ogZ }}</p>
-                                    <p>{{ sign.currZ }}</p>
+                                    <p [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >{{ sign.currZ }}</p>
                                 </div>
                                 
                                 <div class="column">
@@ -83,19 +83,19 @@
             <h3>{{ selectedConstructionWork.city }} - {{ selectedConstructionWork.street }}</h3>
             <div class="date-container">
                 <div class="dates">
-                    <label>X axis</label>
-                    <p>{{ selectedCard.ogAngle }}</p>
-                    <p>{{ selectedCard.currAngle }}</p>
+                    <label [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >X axis</label>
+                    <p>{{ selectedCard.ogX }}</p>
+                    <p [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >{{ selectedCard.currX }}</p>
                 </div>
                 <div class="dates">
-                    <label>Y axis</label>
-                    <p>{{ selectedCard.ogAngle }}</p>
-                    <p>{{ selectedCard.currAngle }}</p>
+                    <label [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >Y axis</label>
+                    <p>{{ selectedCard.ogY }}</p>
+                    <p [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >{{ selectedCard.currY }}</p>
                 </div>
                 <div class="dates">
-                    <label>Z axis</label>
-                    <p>{{ selectedCard.ogAngle }}</p>
-                    <p>{{ selectedCard.currAngle }}</p>
+                    <label [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >Z axis</label>
+                    <p>{{ selectedCard.ogZ }}</p>
+                    <p [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >{{ selectedCard.currZ }}</p>
                 </div>
                 <div class="sign-info">
                     <p> Sign: {{ selectedCard.id }}</p>

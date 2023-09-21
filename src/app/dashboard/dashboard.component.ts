@@ -12,9 +12,17 @@ function mapReceivedSignToInterface(sign: any): Signs {
     id: sign.Id,
     csId: sign.CSId,
     planId: sign.PlanId,
+    sensorId: sign.SensorId,
     ogAngle: sign.OgAngle,
     currAngle: sign.CurrAngle,
-    issue: sign.Issue // Map any other properties as needed
+    issue: sign.Issue,
+    ogX: sign.OgX,
+    ogY: sign.OgY,
+    ogZ: sign.OgZ,
+    currX: sign.CurrX,
+    currY: sign.CurrY,
+    currZ: sign.CurrZ
+     // Map any other properties as needed
   };
 }
 
@@ -31,6 +39,7 @@ export class DashboardComponent implements OnInit {
   hasError: boolean = false;
   csRetrived: boolean = false;
   soundPlayed: boolean = false;
+  hasAngleIssue: boolean = false;
 
   cards = [
     {img: './assets/icons8-plus.svg', content: 'New RoadWork'},
@@ -55,12 +64,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getConstructionWorks();
     this.getSigns();
-    this.subscribeToSignUpdates();
     this.subscribeToSignUpdates1();
-    // this.subscribeToSensorUpdate(); // Subscribe to sign updates
   }
 
-  ngOnUpdate():void {
+  ngOnChanges():void {
     this.getConstructionWorks();
     this.getSigns();
   }
@@ -94,12 +101,12 @@ getConstructionWorks() {
       forkJoin(observables).subscribe((responses: Signs[][]) => {
         for (let i = 0; i < works.length; i++) {
           const signs = responses[i];
-          const hasAngleIssue = signs.some(sign =>  Math.abs(sign.ogAngle - sign.currAngle) > 5 || 
-                                                    Math.abs(sign.ogX! - sign.currX!) > 20 ||
-                                                    Math.abs(sign.ogY! - sign.currY!) > 20 ||
-                                                    Math.abs(sign.ogZ! - sign.currZ!) > 20);
-          console.log("hasAngleissue",hasAngleIssue)                                          
-          works[i].status = hasAngleIssue;
+          this.hasAngleIssue = signs.some(sign =>  Math.abs(sign.ogAngle - sign.currAngle) > 5 || 
+                                                    Math.abs(sign.ogX! - sign.currX!) > 40 ||
+                                                    Math.abs(sign.ogY! - sign.currY!) > 40 ||
+                                                    Math.abs(sign.ogZ! - sign.currZ!) > 40);
+          console.log("hasAngleissue",this.hasAngleIssue)                                          
+          works[i].status = this.hasAngleIssue;
         }
         this.modelsService.setConstructionWorks(works);
         this.csRetrived = true;
@@ -122,7 +129,7 @@ getSigns() {
         if (work.status === undefined) {
           break;
         }
-        if (work.status) {
+        if (work.status || this.hasAngleIssue) {
           if (!this.soundPlayed) {
             this.playNotificationSound();
             this.soundPlayed = true;
@@ -138,74 +145,31 @@ getSigns() {
 
   //  trigger function subsribtions
 
-  private subscribeToSignUpdates(): void {
-    console.log("subscribe! Signs",this.constructionWorkService.signUpdate$);
-    this.signUpdateSubscription = this.constructionWorkService.signUpdate$
-      .subscribe((receivedSign: any) => {
-        // console.log(" object received",receivedSign)
-        // Handle the received sign update
-        if (receivedSign) {
-
-          const sign = mapReceivedSignToInterface(receivedSign);
-          const constructionWorks = this.modelsService.getConstructionWorks();
-          // Find the construction work item that corresponds to the received sign.
-
-          this.modelsService.setSigns([sign]);
-          const workToUpdate = constructionWorks.find(work => work.id === sign.csId);
-
-          // console.log("all constructionworks",constructionWorks);
-          // console.log("work to update",workToUpdate);
-
-          if (workToUpdate) {
-            // Update the sign information in the construction work item
-            // console.log("Work status updates after sign change.")
-            const angleDifference = Math.abs(sign.ogAngle - sign.currAngle);
-            if (angleDifference > 5) {
-              workToUpdate.status == true;
-            } else {
-              workToUpdate.status == false;
-            }
-            // console.log("Work status updates after sign change.",workToUpdate)
-            // You can also update any other relevant properties here
-            // console.log("all constructionworks AFTER UPDATE OF STATUS",constructionWorks);
-            // Update the construction works in the service
-            this.modelsService.setConstructionWorks([...constructionWorks]);
-            // console.log("all constructionworks AFTER UPDATE OF STATUS",constructionWorks);
-          }
-        }
-      });
-  }
-
   private subscribeToSignUpdates1(): void {
     // console.log("subscribe! Sensors",this.constructionWorkService.sensorUpdate$);
     this.sensorUpdateSubscription = this.constructionWorkService.sensorUpdate$
       .subscribe((receivedSign: any) => {
-        console.log(" object received",receivedSign);
+        console.log(" DASHBOARD | Subscribe object received",receivedSign);
         // Handle the received sign update
         if (receivedSign) {
           // Map the received sign to match the local interface naming
           const sign = mapReceivedSignToInterface(receivedSign);
-
-          console.log(" set sign",sign);
+          console.log("DASHBOARD | Subscribe  MAPPED SIGN: " , sign)
           this.modelsService.setSigns([sign]);
+          console.log("DASHBOARD | Subscribe  Calling update " , sign)
           this.constructionWorkService.updateSign(sign)
 
           // Get the construction works from the service
           const constructionWorks = this.modelsService.getConstructionWorks();
           const workToUpdate = constructionWorks.find(work => work.id === sign.csId);
           if (workToUpdate) {
-            // Update the sign information in the construction work item
-            // console.log(" object rECEIVED SIGNS",sign);
-            // console.log("Received SIGN ISSSUE : " ,sign.issue)
-            if (sign.issue !== "OK") {     
+            console.log("Dashboard | subsribe sign issue: ",sign.issue)
+            if (sign.issue !== "OK" && sign.issue !== "") {     
               workToUpdate.status = true;
-              // console.log("set workj status :",workToUpdate.status )
             } else {
               workToUpdate.status = false;
             }
-            // console.log("Work status updates after sign change.",workToUpdate)
-            // Update the construction works in the service
-            console.log("all constructionworks AFTER UPDATE OF STATUS",constructionWorks);
+            // console.log("all constructionworks AFTER UPDATE OF STATUS",constructionWorks);
             this.modelsService.setConstructionWorks([...constructionWorks]);
           }
         }
@@ -274,6 +238,7 @@ interface Signs {
   id: number;
   csId: number;
   planId: number;
+  sensorId: string;
   ogAngle: number;
   currAngle: number;
   issue: string;

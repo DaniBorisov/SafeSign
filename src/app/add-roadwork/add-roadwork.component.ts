@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { ConstructionWorkService } from '../construction-work.service';
 import { ModelsStatesService } from '../models-states.service';
-import { WebcamImage, WebcamInitError } from 'ngx-webcam';
 import { NgxScannerQrcodeService,ScannerQRCodeResult,NgxScannerQrcodeComponent ,ScannerQRCodeConfig } from 'ngx-scanner-qrcode';
 
 @Component({
@@ -111,7 +110,7 @@ export class AddRoadworkComponent implements OnInit {
     const imageContainer = document.getElementById("imageContainer") as HTMLElement;
     const inputContainer = document.getElementById("InputContainer") as HTMLElement;
     const confirmButton = document.querySelector(".confirm-button") as HTMLElement;
-    // const confirmButtonBottom = document.querySelector(".confirm-button-bottom") as HTMLElement;
+
     const bottombuttonsContainer = document.getElementById("bottom-buttons") as HTMLElement;
   
     if (this.showImageCont == false) {
@@ -141,13 +140,6 @@ export class AddRoadworkComponent implements OnInit {
       signContainer.style.display = "block";
       this.showSignCont = true;
     }
-    // else if (this.showSignCont == true){
-    //   imageContainer.style.display = "none";
-    //   confirmButton.style.display = "block";
-    //   inputContainer.style.display = "block";
-    //   bottombuttonsContainer.style.display = "none";
-    //   this.showImageCont = false;
-    // }
   }
 
   placeOnMaster() {
@@ -168,7 +160,7 @@ export class AddRoadworkComponent implements OnInit {
 
   addConstructionWork() {
     const payload = {
-      cSite: {
+      CSSite: {
         id: this.newConstructionWork.id.toString(),
         planId: this.newConstructionWork.planId.toString(),
         city: this.newConstructionWork.city,
@@ -227,7 +219,13 @@ export class AddRoadworkComponent implements OnInit {
       "ogAngle": 60,
       "currAngle": 60,
       "sensorId": this.macAddress,
-      "issue": "OK"
+      "issue": "OK",
+      "ogX" : 0,
+      "ogY" : 0,
+      "ogZ" : 0,
+      "currX" : 0,
+      "currY" : 0,
+      "currZ" : 0
     };
     const updatedsigns = [...this.modelsService.getSigns(), newSign];
     this.modelsService.setSigns(updatedsigns);
@@ -254,4 +252,10 @@ interface Signs {
   ogAngle: number;
   currAngle: number;
   issue: string;
+  ogX: number;
+  ogY: number;
+  ogZ: number;
+  currX: number;
+  currY: number;
+  currZ: number;
 }

@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit} from '@angular/core';
 import { ConstructionWorkService } from '../construction-work.service';
 
 import { ModelsStatesService } from '../models-states.service'; // Import your shared service
+import { catchError, switchMap, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-status',
@@ -14,11 +15,17 @@ export class StatusComponent implements OnInit {
   selectedConstructionWork: any;
   selectedCard: any;
   isMobileView: boolean = false;
+  hasIssue: boolean = false;
+  testSIngs:Signs[] =[];
     
   // leftSideWidth = '30%';
   // rightSideWidth = '70%';
   leftSideFlex = '0 0 30%';
   rightSideFlex = '1 1 70%';
+
+  axisXIssue = false;
+  axisYIssue = false;
+  axisZIssue = false;
 
   searchText: string = '';
   constructionWorks: ConstructionWork[] = [];
@@ -36,41 +43,27 @@ export class StatusComponent implements OnInit {
     const constructionWorksData = sessionStorage.getItem('constructionWorks');
     const signsData = sessionStorage.getItem('signs');
 
-    console.log("---------------")
-    console.log(constructionWorksData)
-
-    console.log("---------------")
-    console.log(signsData)
     if (constructionWorksData) {
       // Data is available in SessionStorage, parse and use it
       this.constructionWorks = JSON.parse(constructionWorksData);
       // this.getSigns(); // You can call getSigns() here if needed
-    } else {
-
     }
 
     if(signsData){
       this.allSigns = JSON.parse(signsData);
     }
-    else{
-      this.getSigns()
-    }
+    // else{
+    //   // this.getSigns()
+    // }
 
-    // this.getConstructionWorks();
-    this.getSigns()
+
+    // this.getSigns()
     this.checkViewport();
 
+    // this.modelsService. signs$.subscribe((signs:Signs[]) => {
+    // this.allSigns = signs;
 
-    // this.modelsService.constructionWorks$.subscribe((works: ConstructionWork[]) => {
-    //   this.constructionWorks = works;
-    //   // console.log("get all C Works" + this.constructionWorks);
     // });
-
-    this.modelsService. signs$.subscribe((signs:Signs[]) => {
-    this.allSigns = signs;
-
-      // console.log("get all Signs Status" + this.allSigns);
-    });
   }
 
   // Main functionallities
@@ -86,58 +79,129 @@ getSigns() {
 
 
 retrieveSignsByWorkId(card: any) {
-  console.log("all signs", this.allSigns)
+  // console.log("all signs", this.allSigns)
   this.selectedConstructionWork = card;
-  const signsData = sessionStorage.getItem('signs');
+  // const signsData = sessionStorage.getItem('signs');
   if (this.allSigns) {
-    // Data is available in SessionStorage, parse and use it
-    // const signs: Signs[] = JSON.parse(signsData);
     this.retrievedSigns = this.allSigns.filter(sign => {
       return Number(sign.csId) === Number(card.id);
     });
-    console.log("retrived", this.retrievedSigns)
+    // console.log("retrived", this.retrievedSigns)
   } 
 }
 
   hasIssues(workId: number): boolean {
     const selectedWork = this.constructionWorks.find(work => work.id === workId);
     const relatedSigns = this.allSigns.filter(sign => sign.csId === workId);
+
+
+    let hasXIssue = false;
+    let hasYIssue = false;
+    let hasZIssue = false;
     
-    let hasIssue = false;
+    // console.log("STATUS | HAS ISSUEz Related sign: " , relatedSigns)
+    // console.log("STATUS | HAS ISSUE Selected card", this.selectedCard)
+    // relatedSigns.forEach(sign => {
+    //   // console.log("STATUS | HAS ISSUEz SIGN ISSUE: " , sign.issue)
+    //   if (sign.issue !== "OK" )
+    //   {
+    //     this.hasIssue = true;
+    //   }
+    // });
 
     relatedSigns.forEach(sign => {
-      console.log("STATUS HAS ISSUEz SIGN ISSUE: " , sign.issue)
-      if (sign.issue !== "OK" && sign.issue !== null)
-      {
-        hasIssue = true;
+      if (sign.issue.includes('X')) {
+        hasXIssue = true;
       }
-      else{
-        sign.issue = "OK";
+      if (sign.issue.includes('Y')) {
+        hasYIssue = true;
       }
-      // if (Math.abs(sign.currAngle - sign.ogAngle) > 5 ||
-      //     Math.abs(sign.currX! - sign.ogX!) > 20 ||
-      //     Math.abs(sign.currY! - sign.ogY!) > 20 ||
-      //     Math.abs(sign.currZ! - sign.ogZ!) > 20 ) {
-      //   // sign.issue = "Angle Issue";
-      //   hasIssue = true;
-      // } else {
-      //   sign.issue = "OK";
-      // }   
+      if (sign.issue.includes('Z')) {
+        hasZIssue = true;
+      }
     });
   
     if(selectedWork){
-      selectedWork.status = hasIssue ;
+      // selectedWork.status = this.hasIssue ;
+      this.axisXIssue = hasXIssue;
+      this.axisYIssue = hasYIssue;
+      this.axisZIssue = hasZIssue;
+      selectedWork.status = hasXIssue || hasYIssue || hasZIssue;
     }
-    return hasIssue;
+    this.hasIssue = hasXIssue || hasYIssue || hasZIssue;
+    return this.hasIssue;
   }
+
+  // UpdateAngle(Id: number, workId: number) {
+  //   const selectedSign = this.allSigns.find(sign => sign.csId === workId && sign.id === Id);
+  //   console.log("STATUS | UpdateAngle slelected mac:",selectedSign?.sensorId )
+  //   if (!selectedSign) {
+  //         return; // Exit early if selectedSign is not foundS
+  //       }
+  //   const tempIssue = selectedSign.issue;
+  //   const tempcurrX = selectedSign.currX;
+  //   const tempcurrY = selectedSign.currY;
+  //   const tempcurrZ = selectedSign.currZ;
+  //     // Set currAngle to ogAngle
+  //   selectedSign.currX = selectedSign.ogX;
+  //   selectedSign.currY = selectedSign.ogY;
+  //   selectedSign.currZ = selectedSign.ogZ;
+  //   selectedSign.issue = "OK";
+
+  //     console.log("STATUS | UpdateAngle selectedSign: " , selectedSign)
+  //     this.constructionWorkService.updateSign(selectedSign)
+  //     .pipe(
+  //       tap(() => {
+  //         console.log("Sign updated successfully!");
+
+  //         selectedSign.issue = "OK";
+  //         // this.selectedCard.issue = "OK";
+  //         // this.selectedCard.currAngle = this.selectedCard.ogAngle;
+  //         selectedSign.currX = selectedSign.ogX;
+  //         // this.selectedCard.currX = this.selectedCard.ogX;
+  //         selectedSign.currY = selectedSign.ogY;
+  //         // this.selectedCard.currY = this.selectedCard.ogY;
+  //         selectedSign.currX = selectedSign.ogX;
+  //         // this.selectedCard.currZ = this.selectedCard.ogZ;
+          
+  //       }),
+  //       catchError(error => {
+  //         // Handle the error case here if needed
+  //         selectedSign.currX = tempcurrX;
+  //         selectedSign.currY = tempcurrY;
+  //         selectedSign.currZ = tempcurrZ;
+  //         if(tempIssue === "")
+  //         {
+  //           selectedSign.issue = "OK";
+  //         }
+  //         else
+  //         {
+  //           selectedSign.issue = tempIssue;
+  //         }
+  //         console.error("Error updating sign:", error);
+  //         return throwError("Failed to update sign",error);
+  //       })
+  //     )
+  //     .subscribe(() => {
+
+  //       this.retrievedSigns = this.retrievedSigns.map(sign => {
+  //         if (sign.csId === workId && sign.id === Id) {
+  //           console.log(" LOG FOR Updated selected sign objrect" ,selectedSign );
+  //           return selectedSign; // Replace the matching sign with the updated one
+  //         }
+  //         return sign; // Keep other signs unchanged
+
+  //       });
+  //   });
+  // }
 
   UpdateAngle(Id: number, workId: number) {
     const selectedSign = this.allSigns.find(sign => sign.csId === workId && sign.id === Id);
-  
+    console.log("STATUS | UpdateAngle slelected mac:",selectedSign?.sensorId )
     if (selectedSign) {
-      console.log('Updated sign id:' + Id + "  workid  " + workId); // Debug line
-      console.log('Updated selectedSign:', selectedSign); // Debug line
-      console.log('Updated selected Card:',this.selectedCard); // Debug line
+      // console.log('Updated sign id:' + Id + "  workid  " + workId); // Debug line
+      // console.log('Updated selectedSign:', selectedSign); // Debug line
+      // console.log('Updated selected Card:',this.selectedCard); // Debug line
   
       // Set currAngle to ogAngle
       selectedSign.currAngle = selectedSign.ogAngle;
@@ -146,18 +210,25 @@ retrieveSignsByWorkId(card: any) {
       selectedSign.currZ = selectedSign.ogZ;
       selectedSign.issue = "OK";
 
-  
-      this.constructionWorkService.updateSign(selectedSign)
-        .subscribe(() => {
-          console.log("Sign updated successfully!");
-          
-  
-          // Check the angle after updating
-          this.constructionWorkService.checkSignAngle(selectedSign)
+      console.log("STATUS | UpdateAngle selectedSign: " , selectedSign)
+      
+
+      this.constructionWorkService.checkSignAngle(selectedSign)
             .subscribe(() => {
               console.log("Sign angle Correct!");
-
-              console.log("+++++++++++++  issue ======" ,selectedSign.issue )
+      // this.constructionWorkService.updateSign(selectedSign)
+      //   .subscribe(() => {
+      //     console.log("Sign updated successfully!");
+  
+          // Check the angle after updating
+          // this.constructionWorkService.checkSignAngle(selectedSign)
+          //   .subscribe(() => {
+          //     console.log("Sign angle Correct!");
+          this.constructionWorkService.updateSign(selectedSign)
+          .subscribe(() => {
+            console.log("Sign updated successfully!");
+            
+              // console.log("+++++++++++++  issue ======" ,selectedSign.issue )
               if (selectedSign.issue === "Angle Issue")
               {
                 selectedSign.issue = "Angle Issue";
@@ -179,7 +250,10 @@ retrieveSignsByWorkId(card: any) {
               
               this.retrievedSigns = this.retrievedSigns.map(sign => {
                 if (sign.csId === workId && sign.id === Id) {
-                  console.log(" LOG FOR Updated selected sign objrect" ,selectedSign );
+                  // console.log(" LOG FOR Updated selected sign objrect" ,selectedSign );
+                  this.axisXIssue = false;
+                  this.axisYIssue = false;
+                  this.axisZIssue = false;
                   return selectedSign; // Replace the matching sign with the updated one
                 }
                 return sign; // Keep other signs unchanged
@@ -271,6 +345,7 @@ interface Signs {
   id: number;
   csId: number;
   planId: number;
+  sensorId: string;
   ogAngle: number;
   currAngle: number;
   issue: string;
