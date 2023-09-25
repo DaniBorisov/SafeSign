@@ -104,7 +104,7 @@
             </div>    
         </div>
         <div class="delete-button-container">
-            <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Fixed</button>
+            <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Update Sign</button>
         </div>
     </div>
 </div>
@@ -150,10 +150,22 @@
             <div *ngFor="let sign of retrievedSigns" (click)="showDetails(sign)" class="sign-card">
                 <div class="card-body">
                     <div class="card-details">
-                        <div class="column">
-                            <p>{{ sign.ogAngle }}</p>
-                            <p>{{ sign.currAngle }}</p>
+                        <!-- <div class="column">
+                            <label [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >X axis</label>
+                            <p>{{ sign.ogX }}</p>
+                            <p [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >{{ sign.currX }}</p>
                         </div>
+                        <div class="column">
+                            <label [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >Y axis</label>
+                            <p>{{ sign.ogY }}</p>
+                            <p [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >{{ sign.currY }}</p>
+                        </div>
+                        <div class="column">
+                            <label [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >Z axis</label>
+                            <p>{{ sign.ogZ }}</p>
+                            <p [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >{{ sign.currZ }}</p>
+                        </div>
+                         -->
                         <div class="column">
                             <label>Sign</label>
                             <p>{{ sign.id }}</p>
@@ -180,8 +192,19 @@
         <h3>{{ selectedConstructionWork.city }} - {{ selectedConstructionWork.street }}</h3>
         <div class="date-container">
             <div class="dates">
-                <p>{{ selectedCard.issueDate }}</p>
-                <p>{{ selectedCard.issueTime }}</p>
+                <label [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >X axis</label>
+                <p>{{ selectedCard.ogX }}</p>
+                <p [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >{{ selectedCard.currX }}</p>
+            </div>
+            <div class="dates">
+                <label [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >Y axis</label>
+                <p>{{ selectedCard.ogY }}</p>
+                <p [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >{{ selectedCard.currY }}</p>
+            </div>
+            <div class="dates">
+                <label [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >Z axis</label>
+                <p>{{ selectedCard.ogZ }}</p>
+                <p [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >{{ selectedCard.currZ }}</p>
             </div>
             <div class="sign-info">
                 <p> Sign: {{ selectedCard.id }}</p>
@@ -190,7 +213,7 @@
         </div>    
     </div>
     <div class="delete-button-container">
-        <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Update Angle</button>
+        <button class="delete-button" (click)="UpdateAngle(selectedCard.id,selectedConstructionWork.id)" >Update Sign</button>
     </div>
 </div>
 

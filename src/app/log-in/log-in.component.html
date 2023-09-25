@@ -2,12 +2,12 @@
     <div class="login-container">
         <h1>Sign In</h1>
             <div class="login-group">
-                <input type="text" #username placeholder="Username">
+                <input type="text"  [(ngModel)]="username" placeholder="Username"  (keydown.enter)="onEnter()">
             </div>
             <div class="login-group">
-                <input type="password" #password placeholder="Password">
+                <input type="password" [(ngModel)]="password" placeholder="Password" (keydown.enter)="onEnter()">
             </div>
-            <button (click)="login(username.value,password.value)" class="login-button">Confirm</button>
+            <button (click)="login()" class="login-button">Confirm</button>
         <!-- </form> -->
         <div *ngIf="loginFail" class="success-message">
           Invalid Credentils!! Try Aagain

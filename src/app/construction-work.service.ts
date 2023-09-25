@@ -41,7 +41,7 @@ export class ConstructionWorkService {
   // private signUpdateSubject: BehaviorSubject<Signs> = new BehaviorSubject<Signs>({ id: 0, csId: 0, planId: 0, ogAngle: 0, currAngle: 0, issue: '' });
   // signUpdate$ = this.signUpdateSubject.asObservable();
 
-  private sensorUpdateSubject: BehaviorSubject<Sensor> = new BehaviorSubject<Sensor>({ id: "", CSId: "", PlanId: "",  OgAngle: 0, CurrAngle: 0, Issue: "",
+  private sensorUpdateSubject: BehaviorSubject<Sensor> = new BehaviorSubject<Sensor>({ Id: "", CSId: "", PlanId: "",  OgAngle: 0, CurrAngle: 0, Issue: "",
   SensorId: "", Type: 0, OgX: 0, OgY: 0, OgZ:0, CurrX: 0, CurrY: 0, CurrZ: 0 });
   sensorUpdate$ = this.sensorUpdateSubject.asObservable();
 
@@ -65,7 +65,7 @@ export class ConstructionWorkService {
       // Update your local data or trigger any necessary actions here
     });
   }
-  
+
 
   setHasError(hasError: boolean) {
     this.hasErrorSubject.next(hasError);
@@ -95,7 +95,7 @@ export class ConstructionWorkService {
   }
 
   updateSign(sign: Signs): Observable<any> {
-    console.log("update service", sign)
+    console.log("update service", sign, sign.id)
     return this.http.put(this.apiUrl + `sign/${sign.id}`,sign);
   }
 
@@ -123,6 +123,7 @@ interface Signs {
   ogAngle: number;
   currAngle: number;
   issue: string;
+  // type?: number;
   ogX?: number;
   ogY?: number;
   ogZ?: number;
@@ -133,7 +134,7 @@ interface Signs {
 
 
 interface Sensor {
-  id: string;
+  Id: string;
   CSId: string;
   PlanId: string;
   SensorId: string;

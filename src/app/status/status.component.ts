@@ -40,8 +40,12 @@ export class StatusComponent implements OnInit {
   ngOnInit(): void {
          // Check if constructionWorks data is available in SessionStorage
 
+   
+
     const constructionWorksData = sessionStorage.getItem('constructionWorks');
     const signsData = sessionStorage.getItem('signs');
+
+    console.log("STATUS | ON init constructionWorksData",constructionWorksData)
 
     if (constructionWorksData) {
       // Data is available in SessionStorage, parse and use it
@@ -53,11 +57,11 @@ export class StatusComponent implements OnInit {
       this.allSigns = JSON.parse(signsData);
     }
     // else{
-    //   // this.getSigns()
+    //   this.getSigns()
     // }
 
 
-    // this.getSigns()
+    this.getSigns()
     this.checkViewport();
 
     // this.modelsService. signs$.subscribe((signs:Signs[]) => {

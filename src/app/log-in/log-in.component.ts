@@ -17,16 +17,23 @@ export class LogInComponent implements OnInit {
     
   }
 
-  login(username: string,password: string){
+  login(){
 
-    if (username === 'Admin' && password === 'Admin') {
+    if (this.username === 'Admin' && this.password === 'Admin') {
           this.loginFail = false;
           this.router.navigate(['/dashboard']);
         } else {
           this.loginFail = true;
-          alert('Invalid credentials. Please try again.' +"username: "+ username + " "  + "  Password: " + password);
-          username = '';
-          password = '';
+          alert('Invalid credentials. Please try again.' +"username: "+ this.username + " "  + "  Password: " + this.password);
+          this.username = '';
+          this.password = '';
         }
   }
+
+  onEnter() {
+    if (this.username && this.password) {
+      this.login();
+    }
+  }
+
 }

@@ -21,7 +21,8 @@ function mapReceivedSignToInterface(sign: any): Signs {
     ogZ: sign.OgZ,
     currX: sign.CurrX,
     currY: sign.CurrY,
-    currZ: sign.CurrZ
+    currZ: sign.CurrZ,
+    // type: sign.Type
      // Map any other properties as needed
   };
 }
@@ -65,6 +66,13 @@ export class DashboardComponent implements OnInit {
     this.getConstructionWorks();
     this.getSigns();
     this.subscribeToSignUpdates1();
+    // console.log("DASHBOARD TEDST OBJECT ON INIT  " , this.objectTest )
+    // if (this.objectTest && this.objectTest[0].sensorId !== "")
+    // {
+    //   console.log("DASHBOARD TEDST OBJECT ON INIT  triggering" , this.objectTest[0].id )
+    //   this.constructionWorkService.updateSign(this.objectTest[0])
+    //   this.modelsService.setSigns([this.objectTest[0]]);
+    // }
   }
 
   ngOnChanges():void {
@@ -156,8 +164,8 @@ getSigns() {
           const sign = mapReceivedSignToInterface(receivedSign);
           console.log("DASHBOARD | Subscribe  MAPPED SIGN: " , sign)
           this.modelsService.setSigns([sign]);
-          console.log("DASHBOARD | Subscribe  Calling update " , sign)
-          this.constructionWorkService.updateSign(sign)
+          // console.log("DASHBOARD | Subscribe  Calling update " , sign)
+          // this.constructionWorkService.updateSign(sign);
 
           // Get the construction works from the service
           const constructionWorks = this.modelsService.getConstructionWorks();
@@ -242,6 +250,7 @@ interface Signs {
   ogAngle: number;
   currAngle: number;
   issue: string;
+  // type?: number;
   ogX?: number;
   ogY?: number;
   ogZ?: number;
