@@ -95,12 +95,10 @@ export class ConstructionWorkService {
   }
 
   updateSign(sign: Signs): Observable<any> {
-    console.log("update service", sign, sign.id)
     return this.http.put(this.apiUrl + `sign/${sign.id}`,sign);
   }
 
   checkSignAngle(sign: Signs): Observable<any> {
-    console.log("update service" + sign.id)
     return this.http.get(this.apiUrl + `sign/checksignangle/${sign.id}`);
   }
 }

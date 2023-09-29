@@ -182,11 +182,20 @@ export class AddRoadworkComponent implements OnInit {
     };
 
     this.constructionWorkService.addConstructionWorkwithSignsSensors(payload)
-      .subscribe(() => {
+      .subscribe((response: any) => {
         console.log("API call successful. Adding new ConstructionWork with signs.");
         console.log("Payload." + payload);
-        const updatedConstructionWorks = [...this.modelsService.getConstructionWorks(), this.newConstructionWork];
+
+        
+        const updatedConstructionWorks = [...this.modelsService.getConstructionWorks(), response.constructionSite];
         this.modelsService.setConstructionWorks(updatedConstructionWorks);
+
+        const currentSigns = this.modelsService.getSigns();
+
+        // const updatedsigns = [...currentSigns, this.signsData];
+
+        const updatedSigns = currentSigns.concat(response.signs);
+        this.modelsService.setSigns(updatedSigns);
         // Clear form fields after successful addition
         this.newConstructionWork = {
           id: 0,
@@ -198,14 +207,12 @@ export class AddRoadworkComponent implements OnInit {
           status: false
         };
         this.signsData = []; // Clear the signs data as well
-
+        this.router.navigate(['/dashboard']);
       },
       error => {
         console.error("API call failed:", error);
       }
       );
-
-    this.router.navigate(['/dashboard']);
   }
 
 
@@ -227,9 +234,6 @@ export class AddRoadworkComponent implements OnInit {
       "currY" : 0,
       "currZ" : 0
     };
-    const updatedsigns = [...this.modelsService.getSigns(), newSign];
-    this.modelsService.setSigns(updatedsigns);
-    console.log("psuh new sign into storage",updatedsigns)
     this.signsData.push(newSign);
   }
 }

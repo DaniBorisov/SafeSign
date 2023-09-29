@@ -46,6 +46,7 @@ export class StatusComponent implements OnInit {
     const signsData = sessionStorage.getItem('signs');
 
     console.log("STATUS | ON init constructionWorksData",constructionWorksData)
+    console.log("STATUS | ON init signsData",signsData)
 
     if (constructionWorksData) {
       // Data is available in SessionStorage, parse and use it

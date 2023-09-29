@@ -56,6 +56,7 @@ export class CloseRoadworkComponent implements OnInit {
           console.log("API call successful. Removing from constructionWorks array.");
           this.constructionWorks = this.constructionWorks.filter(work => work.id !== selectedWork.id);
           console.log("constructionWorks after deletion:", this.constructionWorks);
+          this.constructionWorkService.getAllConstructionWork()
         },
         error => {
           console.error("API call failed:", error);

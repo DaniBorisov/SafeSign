@@ -63,21 +63,14 @@ export class DashboardComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    this.getConstructionWorks();
     this.getSigns();
+    this.getConstructionWorks();
     this.subscribeToSignUpdates1();
-    // console.log("DASHBOARD TEDST OBJECT ON INIT  " , this.objectTest )
-    // if (this.objectTest && this.objectTest[0].sensorId !== "")
-    // {
-    //   console.log("DASHBOARD TEDST OBJECT ON INIT  triggering" , this.objectTest[0].id )
-    //   this.constructionWorkService.updateSign(this.objectTest[0])
-    //   this.modelsService.setSigns([this.objectTest[0]]);
-    // }
   }
 
   ngOnChanges():void {
-    this.getConstructionWorks();
     this.getSigns();
+    this.getConstructionWorks();
   }
 
   ngOnDestroy(): void {
@@ -125,6 +118,7 @@ getConstructionWorks() {
 getSigns() {
   this.constructionWorkService.getAllSigns()
     .subscribe((signs: Signs[]) => {
+      sessionStorage.setItem('signs', JSON.stringify(signs));
       this.modelsService.setSigns(signs);
    });
 }

@@ -28,7 +28,8 @@ export class ModelsStatesService {
         status: hasSignIssues
       };
     });
-    console.log("Updated logs",updatedWorks)
+    // console.log("Updated logs",updatedWorks)
+    console.log("STATE SERVICE | Set Construction Works added works: " , updatedWorks)
     this.constructionWorksSubject.next(updatedWorks);
     sessionStorage.setItem('constructionWorks', JSON.stringify(updatedWorks));
   }
@@ -43,8 +44,9 @@ export class ModelsStatesService {
       ...sign,
       issue: sign.issue
     }));
+    console.log("STATE SERVICE | Set SIGNS added signs: " , signsWithIssue)
     this.signsSubject.next(signsWithIssue);
-    sessionStorage.setItem('signs', JSON.stringify(signsWithIssue));
+    sessionStorage.setItem('signs', JSON.stringify(signsWithIssue)); 
   }
 
   getSigns():Signs[] {
