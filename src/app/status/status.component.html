@@ -146,27 +146,12 @@
             <button class="back-arrow" (click)="goBackSigns()">&lt; Back</button>
         </div>
         <div class="sign-cards">
-            <h3>Signs</h3>
+            <h3 style="display: flex;">{{ selectedConstructionWork.street }} - {{ selectedConstructionWork.city }} | Zip Code</h3>
+            <h3>Signs:</h3>
             <div *ngFor="let sign of retrievedSigns" (click)="showDetails(sign)" class="sign-card">
                 <div class="card-body">
                     <div class="card-details">
-                        <!-- <div class="column">
-                            <label [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >X axis</label>
-                            <p>{{ sign.ogX }}</p>
-                            <p [ngStyle]="{'color': axisXIssue ? 'red' : 'inherit'}" >{{ sign.currX }}</p>
-                        </div>
-                        <div class="column">
-                            <label [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >Y axis</label>
-                            <p>{{ sign.ogY }}</p>
-                            <p [ngStyle]="{'color': axisYIssue ? 'red' : 'inherit'}" >{{ sign.currY }}</p>
-                        </div>
-                        <div class="column">
-                            <label [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >Z axis</label>
-                            <p>{{ sign.ogZ }}</p>
-                            <p [ngStyle]="{'color': axisZIssue ? 'red' : 'inherit'}" >{{ sign.currZ }}</p>
-                        </div>
-                         -->
-                        <div class="column">
+                         <div class="column">
                             <label>Sign</label>
                             <p>{{ sign.id }}</p>
                         </div>

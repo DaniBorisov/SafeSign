@@ -85,6 +85,7 @@ export class AddRoadworkComponent implements OnInit {
       } else {
         console.log("MAC address not found in the QR code result.");
         console.log("event:", e);
+        action.stop();
       }
     } else {
       console.log("No QR code data available.");
@@ -185,7 +186,7 @@ export class AddRoadworkComponent implements OnInit {
       .subscribe((response: any) => {
         console.log("API call successful. Adding new ConstructionWork with signs.");
         console.log("Payload." + payload);
-
+        // console.log("RESPONSE: Csite | Signs" , response.constructionSite, response.signs)
         
         const updatedConstructionWorks = [...this.modelsService.getConstructionWorks(), response.constructionSite];
         this.modelsService.setConstructionWorks(updatedConstructionWorks);
@@ -210,7 +211,8 @@ export class AddRoadworkComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error => {
-        console.error("API call failed:", error);
+        alert("API call failed: " + error.error.message);
+        console.error("API call failed error message:", error);
       }
       );
   }
