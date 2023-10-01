@@ -157,7 +157,8 @@ getSigns() {
           // Map the received sign to match the local interface naming
           const sign = mapReceivedSignToInterface(receivedSign);
           console.log("DASHBOARD | Subscribe  MAPPED SIGN: " , sign)
-          this.modelsService.setSigns([sign]);
+          this.modelsService.updateSigns(sign)
+          // this.modelsService.setSigns([sign]);
           // console.log("DASHBOARD | Subscribe  Calling update " , sign)
           // this.constructionWorkService.updateSign(sign);
 

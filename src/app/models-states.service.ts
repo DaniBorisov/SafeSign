@@ -66,4 +66,13 @@ export class ModelsStatesService {
       this.constructionWorksSubject.next(currentWorks);
     }
   }
+
+  updateSigns(sign: Signs) {
+    const currentSigns = this.signsSubject.value;
+    const index = currentSigns.findIndex(s => s.id === sign.id);
+    if (index !== -1) {
+      currentSigns[index] = sign;
+      this.signsSubject.next(currentSigns);
+    }
+  }
 }

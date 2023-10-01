@@ -128,9 +128,9 @@ retrieveSignsByWorkId(card: any) {
   
     if(selectedWork){
       // selectedWork.status = this.hasIssue ;
-      this.axisXIssue = hasXIssue;
-      this.axisYIssue = hasYIssue;
-      this.axisZIssue = hasZIssue;
+      // this.axisXIssue = hasXIssue;
+      // this.axisYIssue = hasYIssue;
+      // this.axisZIssue = hasZIssue;
       selectedWork.status = hasXIssue || hasYIssue || hasZIssue;
     }
     this.hasIssue = hasXIssue || hasYIssue || hasZIssue;
