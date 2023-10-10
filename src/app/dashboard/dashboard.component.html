@@ -1,8 +1,8 @@
 <body>
     <audio #notificationSound src="./assets/error-126627.mp3" preload="auto"></audio>
     <div class="dashboard-container">
-        <div class="single-card">
-            <div class="card-content" (click)="handleCardClickStatus()">
+        <div class="single-card" (click)="handleCardClickStatus()">
+            <div class="card-content">
                 <!-- <img src="../../assets/icons8-ok.gif"> -->
                 <img [src]="isStatusOK() ? './assets/icons8-ok.gif' : './assets/icons8-error.gif'">
                 <p>Status</p>
