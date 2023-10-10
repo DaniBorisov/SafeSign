@@ -41,7 +41,7 @@ export class StatusComponent implements OnInit {
          // Check if constructionWorks data is available in SessionStorage
 
    
-
+    
     const constructionWorksData = sessionStorage.getItem('constructionWorks');
     const signsData = sessionStorage.getItem('signs');
 

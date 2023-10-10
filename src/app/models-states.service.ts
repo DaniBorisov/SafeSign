@@ -73,6 +73,7 @@ export class ModelsStatesService {
     if (index !== -1) {
       currentSigns[index] = sign;
       this.signsSubject.next(currentSigns);
+      sessionStorage.setItem('signs', JSON.stringify(currentSigns)); 
     }
   }
 }
